@@ -1,8 +1,12 @@
 <template>
-    <div class="text-center py-5">
-        <input v-model="username" type="text" class="bg-zinc-800 px-4 py-2 rounded-xl w-1/2 outline-none" placeholder="Type an username...">
-        <button class="bg-blue-500 rounded-xl ml-3 px-3 py-2" @click="copyLink">Copy link</button>
-        <input type="text" :value="getLink" id="link" class="hidden">
+    <div class="py-5 px-6 flex justify-between items-center">
+        <span class="invisible">Invisible!</span>
+        <div class="w-full text-center">
+            <input v-model="username" type="text" class="w-1/2 bg-zinc-800 px-4 py-2 rounded-xl outline-none" placeholder="Type an username...">
+            <button class="bg-indigo-500 rounded-xl ml-3 px-3 py-2" @click="copyLink">Copy link</button>
+            <input type="text" :value="getLink" id="link" class="hidden">
+        </div>
+        <a class="" href="https://github.com/Kalyax/anilist-tierlist"><img src="/img/github-mark-white.svg" alt="Github" width="28"></a>
     </div>
 </template>
 
