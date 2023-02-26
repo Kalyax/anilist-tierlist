@@ -19,11 +19,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const props = defineProps({
     id: Number
 });
+
+watch(() => props.id, (newVal) => {
+    if(newVal) fetchEntries(newVal)
+})
+
+onMounted(() => {
+    if(props.id) fetchEntries(props.id)
+})
 
 const groups = [
     {
@@ -53,56 +61,57 @@ const groups = [
     },
 ]
 
-const query = `#graphql
-query ($id: Int) {
-  MediaListCollection(userId: $id, type: ANIME){
-    lists {
-      entries{
-        score
-        media{
-          id
-          siteUrl
-          title{
-            english
-          }
-          coverImage {
-            medium
+const data: any = ref({});
+
+async function fetchEntries(userId: number): Promise<void>{
+    const query = `#graphql
+    query ($id: Int) {
+      MediaListCollection(userId: $id, type: ANIME){
+        lists {
+          entries{
+            score
+            media{
+              id
+              siteUrl
+              title{
+                english
+              }
+              coverImage {
+                medium
+              }
+            }
           }
         }
       }
-    }
-  }
-}`
+    }`
 
-const variables = {
-    id: props.id
-};
+    const variables = {
+        id: userId
+    };
 
-const url = 'https://graphql.anilist.co',
-    options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-            query: query,
-            variables: variables
-        })
-};
+    const url = 'https://graphql.anilist.co',
+        options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                query: query,
+                variables: variables
+            })
+    };
 
-const data: any = ref({});
-
-async function fetchEntries(){
     try {
         const res = await fetch(url, options);
         const json = await res.json()
         data.value = formatData(json.data)
     } catch (err) {
-        if(err) throw err;
+        //TODO: Popup error
     }
 }
-function formatData(data: any){
+
+function formatData(data: any): Array<Array<Object>>{
     let entries: Array<Array<Object>> = [[], [], [], [], [], [], [], [], [], []]
     for(let list of data.MediaListCollection.lists){
         for(let entry of list.entries){
@@ -114,6 +123,4 @@ function formatData(data: any){
     }
     return entries
 }
-
-fetchEntries()
 </script>

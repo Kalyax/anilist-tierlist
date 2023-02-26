@@ -1,30 +1,47 @@
 <template>
-    <form class="text-center py-5">
-        <input v-model="model" type="text" class="bg-zinc-800 px-4 py-2 rounded-xl w-1/2 outline-none" placeholder="Type an username...">
-        <button @click="searchUser()" class="bg-blue-500 rounded-xl ml-3 px-3 py-2">Search</button>
-    </form>
+    <div class="text-center py-5">
+        <input v-model="username" type="text" class="bg-zinc-800 px-4 py-2 rounded-xl w-1/2 outline-none" placeholder="Type an username...">
+        <button class="bg-blue-500 rounded-xl ml-3 px-3 py-2" @click="copyLink">Copy link</button>
+        <input type="text" :value="getLink" id="link" class="hidden">
+    </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, defineEmits, watch, computed, defineProps } from 'vue'
 
-const model = ref()
+const emit = defineEmits(["userId"])
+const props = defineProps(["id"])
+const username = ref()
+const id = ref(props.id)
 
-function replaceId(id: any){
-    /*const searchParams = new URLSearchParams(window.location.search);
-    searchParams.set('id', id);
-    console.log(searchParams.toString());
-    window.location.search = ""
-    history.pushState()
-    window.location.search = searchParams.toString()*/
+const getLink = computed(() => {
+    const url = new URL(window.location.href);
+    const searchParams = url.searchParams;
+    searchParams.set('id', id.value);
+    url.search = searchParams.toString();
+    return url.toString();
+})
 
-    const url = new URL(window.location as unknown as string);
-    url.searchParams.set('id', id);
-    window.history.pushState({}, '', url);
+watch(username, (val) => {
+    setTimeout(async () => {
+        if(username.value === val) {    
+            id.value = await searchUser(username.value)
+            emit("userId", id.value)
+        }
+    }, 1000)
+})
 
-}
+function copyLink() {
+    const copyText = document.getElementById("link") as HTMLInputElement;
 
-async function searchUser(){
+    if(copyText == null) return;
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(copyText.value);
+    return false;
+} 
+
+async function searchUser(localUsername: string): Promise<string | null>{
     const query = `#graphql
     query ($name: String){
     	User(name: $name){
@@ -33,7 +50,7 @@ async function searchUser(){
     }`
 
     const variables = {
-        name: model.value
+        name: localUsername
     };
 
     const url = 'https://graphql.anilist.co',
@@ -52,9 +69,10 @@ async function searchUser(){
     try {
         const res = await fetch(url, options);
         const json = await res.json()
-        replaceId(json.data.User.id)
+        return json.data.User.id
     } catch (err) {
         //TODO: POPUP ERROR
     }
+    return null
 }
 </script>
