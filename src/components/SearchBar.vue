@@ -1,38 +1,47 @@
 <template>
     <div class="py-5 px-6 flex justify-between items-center">
-        <span class="invisible">Invisible!</span>
+        <span class="invisible">Invisible</span>
         <div class="w-full text-center">
-            <input v-model="username" type="text" class="w-1/2 bg-zinc-800 px-4 py-2 rounded-xl outline-none" placeholder="Type an username...">
-            <button class="bg-indigo-500 rounded-xl ml-3 px-3 py-2" @click="copyLink">Copy link</button>
+            <input v-model="username" type="text" 
+                class="w-1/2 bg-zinc-800 hover:bg-zinc-800/80 focus:bg-zinc-800/50 transition-colors px-4 py-2 rounded-xl outline-none" 
+                placeholder="Type an username...">
+            <button 
+                class="bg-sky-500 hover:bg-sky-600 focus:bg-green-500 transition-colors duration-300 font-bold rounded-xl ml-3 px-3 py-2" 
+                @click="copyLink">
+                Copy link
+            </button>
             <input type="text" :value="getLink" id="link" class="hidden">
         </div>
-        <a class="" href="https://github.com/Kalyax/anilist-tierlist"><img src="/img/github-mark-white.svg" alt="Github" width="28"></a>
+        <a class="hover:animate-pulse hover:bg-zinc-800 rounded-full p-2 transition-all" href="https://github.com/Kalyax/anilist-tierlist">
+            <img src="/img/github-mark-white.svg" alt="Github" width="32">
+        </a>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref, defineEmits, watch, computed, defineProps } from 'vue'
 
-const emit = defineEmits(["userId"])
-const props = defineProps(["id"])
+const emit = defineEmits(["fetchUser"])
 const username = ref()
-const id = ref(props.id)
 
-const getLink = computed(() => {
-    const url = new URL(window.location.href);
-    const searchParams = url.searchParams;
-    searchParams.set('id', id.value);
-    url.search = searchParams.toString();
-    return url.toString();
+const props = defineProps({
+    id: Number
 })
 
 watch(username, (val) => {
     setTimeout(async () => {
         if(username.value === val) {    
-            id.value = await searchUser(username.value)
-            emit("userId", id.value)
+            emit("fetchUser", username.value);
         }
-    }, 1000)
+    }, 750)
+})
+
+const getLink = computed(() => {
+    const url = new URL(window.location.href);
+    const searchParams = url.searchParams;
+    searchParams.set('id', <string><unknown>props.id);
+    url.search = searchParams.toString();
+    return url.toString();
 })
 
 function copyLink() {
@@ -44,39 +53,4 @@ function copyLink() {
     navigator.clipboard.writeText(copyText.value);
     return false;
 } 
-
-async function searchUser(localUsername: string): Promise<string | null>{
-    const query = `#graphql
-    query ($name: String){
-    	User(name: $name){
-            id
-        }
-    }`
-
-    const variables = {
-        name: localUsername
-    };
-
-    const url = 'https://graphql.anilist.co',
-        options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({
-                query: query,
-                variables: variables
-            })
-    };
-
-    try {
-        const res = await fetch(url, options);
-        const json = await res.json()
-        return json.data.User.id
-    } catch (err) {
-        //TODO: POPUP ERROR
-    }
-    return null
-}
 </script>

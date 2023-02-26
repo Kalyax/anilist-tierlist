@@ -4,12 +4,7 @@
             <div :class="group.color" class="w-32 font-bold flex items-center justify-center text-3xl rounded-xl text-zinc-900">{{ group.name }}</div>
             <div class="bg-zinc-800 rounded-xl p-3 flex flex-row flex-wrap w-full h-full">
                 <a class="m-1" :href="entry.media.siteUrl" target="_blank" 
-                    v-for="entry of data[group.score-1]"><img
-                    class="rounded-xl w-auto h-full" 
-                    :src="entry.media.coverImage.medium" :alt="entry.media.title.english">
-                </a>
-                <a class="m-1" :href="entry.media.siteUrl" target="_blank" 
-                    v-for="entry of data[group.score-2]" ><img 
+                    v-for="entry of data[group.name]"><img
                     class="rounded-xl w-auto h-full" 
                     :src="entry.media.coverImage.medium" :alt="entry.media.title.english">
                 </a>
@@ -20,9 +15,11 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
+import { animeCollectionsQuery } from './../misc/queries';
 
 const props = defineProps({
-    id: Number
+    id: Number,
+    user: Object
 });
 
 watch(() => props.id, (newVal) => {
@@ -33,83 +30,104 @@ onMounted(() => {
     if(props.id) fetchEntries(props.id)
 })
 
+interface TierList{
+    S: any[],
+    A: any[],
+    B: any[],
+    C: any[],
+    D: any[],
+    E: any[]
+}
+
+function formatData2(data: any){
+    const scoreFormat = props.user?.mediaListOptions.scoreFormat
+    if(scoreFormat == "POINT_100" || scoreFormat == "POINT_10_DECIMAL" || scoreFormat == "POINT_10"){
+        let entries: TierList = {
+            S: [],
+            A: [],
+            B: [],
+            C: [],
+            D: [],
+            E: []
+        };
+
+        for(let list of data.MediaListCollection.lists){
+            if(list.isCustomList) break;
+            for(let entry of list.entries){
+                let score: number;
+
+                if(scoreFormat == "POINT_100") score = Math.ceil(entry.score/10)
+                else if(scoreFormat == "POINT_10_DECIMAL") score = Math.ceil(entry.score)
+                else score = entry.score
+
+                if(score != 0){
+                    if(score == 10) entries.S.push(entry)
+                    else if(score == 9) entries.A.push(entry)
+                    else if(score == 8) entries.B.push(entry)
+                    else if(score == 7) entries.C.push(entry)
+                    else if(score == 6) entries.D.push(entry)
+                    else entries.E.push(entry)
+                }
+            }
+        }
+        return entries
+    }
+}
+
 const groups = [
     {
-        score: 10,
         name: "S",
         color : "bg-red-400"
     },
     {
-        score: 8,
         name: "A",
         color : "bg-orange-300"
     },
     {
-        score: 6,
         name: "B",
         color : "bg-amber-400"
     },
     {
-        score: 4,
         name: "C",
         color : "bg-yellow-300"
     },
     {
-        score: 2,
         name: "D",
         color : "bg-green-400"
     },
+    {
+        name: "E",
+        color : "bg-green-400"
+    }
 ]
 
 const data: any = ref({});
 
 async function fetchEntries(userId: number): Promise<void>{
-    const query = `#graphql
-    query ($id: Int) {
-      MediaListCollection(userId: $id, type: ANIME){
-        lists {
-          entries{
-            score
-            media{
-              id
-              siteUrl
-              title{
-                english
-              }
-              coverImage {
-                medium
-              }
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            query: animeCollectionsQuery,
+            variables: {
+                id: userId
             }
-          }
-        }
-      }
-    }`
-
-    const variables = {
-        id: userId
-    };
-
-    const url = 'https://graphql.anilist.co',
-        options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({
-                query: query,
-                variables: variables
-            })
+        })
     };
 
     try {
-        const res = await fetch(url, options);
+        const res = await fetch('https://graphql.anilist.co', options);
         const json = await res.json()
-        data.value = formatData(json.data)
+        data.value = formatData2(json.data)
     } catch (err) {
         //TODO: Popup error
     }
 }
+
+
 
 function formatData(data: any): Array<Array<Object>>{
     let entries: Array<Array<Object>> = [[], [], [], [], [], [], [], [], [], []]
