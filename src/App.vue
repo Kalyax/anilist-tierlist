@@ -8,5 +8,5 @@ const id = Number(urlParams.get("id"))
 
 <template>
     <SearchBar/>
-    <TierList class="w-3/4" v-if="id" :id="id"/>
+    <TierList class="mx-10" v-if="id" :id="id"/>
 </template>

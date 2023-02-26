@@ -3,14 +3,14 @@
         <div class="flex p-2 space-x-2" v-for="group of groups">
             <div :class="group.color" class="w-32 font-bold flex items-center justify-center text-3xl rounded-xl text-zinc-900">{{ group.name }}</div>
             <div class="bg-zinc-800 rounded-xl p-3 flex flex-row flex-wrap w-full h-full">
-                <a :href="entry.media.siteUrl" target="_blank" 
-                    v-for="entry of data[group.score-1]"><img 
-                    class="rounded-xl h-full" 
+                <a class="m-1" :href="entry.media.siteUrl" target="_blank" 
+                    v-for="entry of data[group.score-1]"><img
+                    class="rounded-xl w-auto h-full" 
                     :src="entry.media.coverImage.medium" :alt="entry.media.title.english">
                 </a>
-                <a :href="entry.media.siteUrl" target="_blank" 
+                <a class="m-1" :href="entry.media.siteUrl" target="_blank" 
                     v-for="entry of data[group.score-2]" ><img 
-                    class="rounded-xl h-full" 
+                    class="rounded-xl w-auto h-full" 
                     :src="entry.media.coverImage.medium" :alt="entry.media.title.english">
                 </a>
             </div>
