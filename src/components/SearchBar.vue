@@ -12,7 +12,7 @@
             </button>
             <input type="text" :value="getLink" id="link" class="hidden">
         </div>
-        <a class="hover:animate-pulse md:hover:bg-zinc-800 rounded-full p-2 transition-all w-14" href="https://github.com/Kalyax/anilist-tierlist">
+        <a target="_blank" class="hover:animate-pulse md:hover:bg-zinc-800 rounded-full p-2 transition-all w-14" href="https://github.com/Kalyax/anilist-tierlist">
             <img class="mx-auto md:mx-0" src="/img/github-mark-white.svg" alt="Github" width="32">
         </a>
     </div>

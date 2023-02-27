@@ -9,7 +9,7 @@
                 <a class="m-1" :href="entry.media.siteUrl" target="_blank" 
                     v-for="entry of data[name]">
                     <img
-                        class="rounded-xl w-16 sm:w-20 md:w-auto h-full" 
+                        class="rounded-xl w-16 sm:w-20 md:w-24 h-full" 
                         :src="entry.media.coverImage.medium" :alt="entry.media.title.english">
                 </a>
             </div>
