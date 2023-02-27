@@ -1,10 +1,10 @@
 <template>
     <section>
-        <div class="flex p-2 space-x-2" v-for="group of groups">
-            <div :class="group.color" class="w-32 font-bold flex items-center justify-center text-3xl rounded-xl text-zinc-900">{{ group.name }}</div>
+        <div class="flex p-2 space-x-2" v-for="name of buildGroups(data)">
+            <div :class="(groupsColors as any)[name]" class="w-32 font-bold flex items-center justify-center text-3xl rounded-xl text-zinc-900">{{ name }}</div>
             <div class="bg-zinc-800 rounded-xl p-3 flex flex-row flex-wrap w-full h-full">
                 <a class="m-1" :href="entry.media.siteUrl" target="_blank" 
-                    v-for="entry of data[group.name]"><img
+                    v-for="entry of data[name]"><img
                     class="rounded-xl w-auto h-full" 
                     :src="entry.media.coverImage.medium" :alt="entry.media.title.english">
                 </a>
@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, computed } from 'vue';
 import { animeCollectionsQuery } from './../misc/queries';
 
 const props = defineProps({
@@ -39,7 +39,7 @@ interface TierList{
     E: any[]
 }
 
-function formatData2(data: any){
+function formatData(data: any){
     const scoreFormat = props.user?.mediaListOptions.scoreFormat
     if(scoreFormat == "POINT_100" || scoreFormat == "POINT_10_DECIMAL" || scoreFormat == "POINT_10"){
         let entries: TierList = {
@@ -74,7 +74,26 @@ function formatData2(data: any){
     }
 }
 
-const groups = [
+function buildGroups(data: any){
+    let groupList: string[] = []
+    for(let key of Object.keys(data)){
+        if (data[key].length > 0){
+            groupList.push(key)
+        }
+    }
+    return groupList
+}
+
+const groupsColors = {
+    S: "bg-red-400",
+    A: "bg-orange-300",
+    B: "bg-amber-400",
+    C: "bg-yellow-300",
+    D: "bg-green-400",
+    E: "bg-green-400"
+}
+
+/*const groups = [
     {
         name: "S",
         color : "bg-red-400"
@@ -99,7 +118,7 @@ const groups = [
         name: "E",
         color : "bg-green-400"
     }
-]
+]*/
 
 const data: any = ref({});
 
@@ -121,7 +140,7 @@ async function fetchEntries(userId: number): Promise<void>{
     try {
         const res = await fetch('https://graphql.anilist.co', options);
         const json = await res.json()
-        data.value = formatData2(json.data)
+        data.value = formatData(json.data)
     } catch (err) {
         //TODO: Popup error
     }
@@ -129,7 +148,7 @@ async function fetchEntries(userId: number): Promise<void>{
 
 
 
-function formatData(data: any): Array<Array<Object>>{
+/*function formatData(data: any): Array<Array<Object>>{
     let entries: Array<Array<Object>> = [[], [], [], [], [], [], [], [], [], []]
     for(let list of data.MediaListCollection.lists){
         for(let entry of list.entries){
@@ -140,5 +159,5 @@ function formatData(data: any): Array<Array<Object>>{
         }
     }
     return entries
-}
+}*/
 </script>

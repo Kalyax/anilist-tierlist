@@ -18,14 +18,9 @@ interface User {
 }
 
 const urlParams = new URLSearchParams(window.location.search);
-//const id = ref(Number(urlParams.get("id")))
 const user = ref(<User>{
-    id: Number(urlParams.get("id")) | 0 
+    id: Number(urlParams.get("id"))
 })
-
-/*function usernameUpdate(newId: string){
-    id.value = Number(newId)
-}*/
 
 async function saveUser(username: string): Promise<void>{
     user.value = <User> await fetchUser(username);
@@ -49,10 +44,12 @@ async function fetchUser(username: string): Promise<User | null>{
     try {
         const res = await fetch('https://graphql.anilist.co', options);
         const json = await res.json()
-        if(json.data === undefined) throw Error()
+        if(json.data.User === null) throw Error()
+        console.log(json.data)
         return <User> json.data.User
     } catch (err) {
         //TODO: POPUP ERROR
+        console.log("ERROR: NOT FOUND USER")
     }
     return null;
 }

@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineEmits, watch, computed, defineProps } from 'vue'
+import { ref, watch, computed, defineProps } from 'vue'
 
 const emit = defineEmits(["fetchUser"])
 const username = ref()
