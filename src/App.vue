@@ -45,7 +45,6 @@ async function fetchUser(username: string): Promise<User | null>{
         const res = await fetch('https://graphql.anilist.co', options);
         const json = await res.json()
         if(json.data.User === null) throw Error()
-        console.log(json.data)
         return <User> json.data.User
     } catch (err) {
         //TODO: POPUP ERROR

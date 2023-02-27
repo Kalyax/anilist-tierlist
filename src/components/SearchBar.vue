@@ -1,9 +1,9 @@
 <template>
-    <div class="py-5 px-6 flex justify-between items-center">
-        <span class="invisible">Invisible</span>
+    <div class="py-5 px-6 block text-center md:flex md:justify-between md:items-center">
+        <p class="text-xl font-extrabold mb-2 md:mb-0">AniTierlist</p>
         <div class="w-full text-center">
             <input v-model="username" type="text" 
-                class="w-1/2 bg-zinc-800 hover:bg-zinc-800/80 focus:bg-zinc-800/50 transition-colors px-4 py-2 rounded-xl outline-none" 
+                class="w-2/5 bg-zinc-800 hover:bg-zinc-800/80 focus:bg-zinc-800/50 transition-colors px-4 py-2 rounded-xl outline-none" 
                 placeholder="Type an username...">
             <button 
                 class="bg-sky-500 hover:bg-sky-600 focus:bg-green-500 transition-colors duration-300 font-bold rounded-xl ml-3 px-3 py-2" 
@@ -12,8 +12,8 @@
             </button>
             <input type="text" :value="getLink" id="link" class="hidden">
         </div>
-        <a class="hover:animate-pulse hover:bg-zinc-800 rounded-full p-2 transition-all" href="https://github.com/Kalyax/anilist-tierlist">
-            <img src="/img/github-mark-white.svg" alt="Github" width="32">
+        <a class="hover:animate-pulse md:hover:bg-zinc-800 rounded-full p-2 transition-all w-14" href="https://github.com/Kalyax/anilist-tierlist">
+            <img class="mx-auto md:mx-0" src="/img/github-mark-white.svg" alt="Github" width="32">
         </a>
     </div>
 </template>

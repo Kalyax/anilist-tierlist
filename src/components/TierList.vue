@@ -1,12 +1,16 @@
 <template>
     <section>
-        <div class="flex p-2 space-x-2" v-for="name of buildGroups(data)">
-            <div :class="(groupsColors as any)[name]" class="w-32 font-bold flex items-center justify-center text-3xl rounded-xl text-zinc-900">{{ name }}</div>
+        <div class="md:flex py-2 md:space-x-2" v-for="name of buildGroups(data)">
+            <div :class="(groupsColors as any)[name]" 
+                class="w-full mb-3 md:mb-0 md:w-32 font-bold flex items-center justify-center text-3xl rounded-xl text-zinc-900">
+                {{ name }}
+            </div>
             <div class="bg-zinc-800 rounded-xl p-3 flex flex-row flex-wrap w-full h-full">
                 <a class="m-1" :href="entry.media.siteUrl" target="_blank" 
-                    v-for="entry of data[name]"><img
-                    class="rounded-xl w-auto h-full" 
-                    :src="entry.media.coverImage.medium" :alt="entry.media.title.english">
+                    v-for="entry of data[name]">
+                    <img
+                        class="rounded-xl w-16 sm:w-20 md:w-auto h-full" 
+                        :src="entry.media.coverImage.medium" :alt="entry.media.title.english">
                 </a>
             </div>
         </div>
@@ -14,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch, computed } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { animeCollectionsQuery } from './../misc/queries';
 
 const props = defineProps({
@@ -30,19 +34,12 @@ onMounted(() => {
     if(props.id) fetchEntries(props.id)
 })
 
-interface TierList{
-    S: any[],
-    A: any[],
-    B: any[],
-    C: any[],
-    D: any[],
-    E: any[]
-}
-
 function formatData(data: any){
     const scoreFormat = props.user?.mediaListOptions.scoreFormat
+    //TODO: factorize code later
+    let entries;
     if(scoreFormat == "POINT_100" || scoreFormat == "POINT_10_DECIMAL" || scoreFormat == "POINT_10"){
-        let entries: TierList = {
+        entries = <any>{
             S: [],
             A: [],
             B: [],
@@ -70,8 +67,53 @@ function formatData(data: any){
                 }
             }
         }
-        return entries
     }
+    else if(scoreFormat == "POINT_5"){
+        entries = <any>{
+            S: [],
+            A: [],
+            B: [],
+            C: [],
+            D: [],
+            E: []
+        };
+
+        for(let list of data.MediaListCollection.lists){
+            if(list.isCustomList) break;
+            for(let entry of list.entries){
+                let score: number = entry.score
+
+                if(score != 0){
+                    if(score == 5) entries.S.push(entry)
+                    else if(score == 4) entries.A.push(entry)
+                    else if(score == 3) entries.B.push(entry)
+                    else if(score == 2) entries.C.push(entry)
+                    else entries.D.push(entry)
+                }
+            }
+        }
+    }
+    else if(scoreFormat == "POINT_3"){
+        entries = <any>{
+            S: [],
+            A: [],
+            B: []
+        };
+
+        for(let list of data.MediaListCollection.lists){
+            if(list.isCustomList) break;
+            for(let entry of list.entries){
+                let score: number = entry.score
+
+                if(score != 0){
+                    if(score == 3) entries.S.push(entry)
+                    else if(score == 2) entries.A.push(entry)
+                    else entries.B.push(entry)
+                }
+            }
+        }
+    }
+    return entries
 }
 
 function buildGroups(data: any){
@@ -92,33 +134,6 @@ const groupsColors = {
     D: "bg-green-400",
     E: "bg-green-400"
 }
-
-/*const groups = [
-    {
-        name: "S",
-        color : "bg-red-400"
-    },
-    {
-        name: "A",
-        color : "bg-orange-300"
-    },
-    {
-        name: "B",
-        color : "bg-amber-400"
-    },
-    {
-        name: "C",
-        color : "bg-yellow-300"
-    },
-    {
-        name: "D",
-        color : "bg-green-400"
-    },
-    {
-        name: "E",
-        color : "bg-green-400"
-    }
-]*/
 
 const data: any = ref({});
 
@@ -143,6 +158,7 @@ async function fetchEntries(userId: number): Promise<void>{
         data.value = formatData(json.data)
     } catch (err) {
         //TODO: Popup error
+        console.log("ERROR: FETCH DATA ERROR")
     }
 }
 
