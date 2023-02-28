@@ -57,11 +57,11 @@ function formatData(data: any){
             for(let entry of list.entries){
                 let score: number;
 
-                if(scoreFormat == "POINT_100") score = Math.ceil(entry.score/10)
-                else if(scoreFormat == "POINT_10_DECIMAL") score = Math.ceil(entry.score)
+                if(scoreFormat == "POINT_100") score = Math.floor(entry.score/10)
+                else if(scoreFormat == "POINT_10_DECIMAL") score = Math.floor(entry.score)
                 else score = entry.score
 
-                if(score != 0){
+                if(entry.score != 0){
                     if(score == 10) entries.S.push(entry)
                     else if(score == 9) entries.A.push(entry)
                     else if(score == 8) entries.B.push(entry)
