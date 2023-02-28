@@ -28,6 +28,7 @@ const props = defineProps({
     id: Number
 })
 
+/** Watches the username input */
 watch(username, (val) => {
     setTimeout(async () => {
         if(username.value === val) {    
@@ -36,6 +37,7 @@ watch(username, (val) => {
     }, 750)
 })
 
+/** Copy button functions */
 const getLink = computed(() => {
     const url = new URL(window.location.href);
     const searchParams = url.searchParams;

@@ -26,17 +26,21 @@ const props = defineProps({
     user: Object
 });
 
-watch(() => props.id, (newVal) => {
+//Watches for id update
+watch(() => props.user?.id, (newVal) => {
     if(newVal) fetchEntries(newVal)
 })
 
 onMounted(() => {
-    if(props.id) fetchEntries(props.id)
+    if(props.user?.id) fetchEntries(props.user?.id)
 })
 
+/** Sorts data retrived by the API call
+ * @param data
+ */
 function formatData(data: any){
-    const scoreFormat = props.user?.mediaListOptions.scoreFormat
     //TODO: factorize code later
+    const scoreFormat = props.user?.mediaListOptions.scoreFormat
     let entries;
     if(scoreFormat == "POINT_100" || scoreFormat == "POINT_10_DECIMAL" || scoreFormat == "POINT_10"){
         entries = <any>{
@@ -116,6 +120,10 @@ function formatData(data: any){
     return entries
 }
 
+/**
+ * Returns all tiers where there's is at least one element
+ * @param data
+ */
 function buildGroups(data: any){
     let groupList: string[] = []
     for(let key of Object.keys(data)){
@@ -161,19 +169,4 @@ async function fetchEntries(userId: number): Promise<void>{
         console.log("ERROR: FETCH DATA ERROR")
     }
 }
-
-
-
-/*function formatData(data: any): Array<Array<Object>>{
-    let entries: Array<Array<Object>> = [[], [], [], [], [], [], [], [], [], []]
-    for(let list of data.MediaListCollection.lists){
-        for(let entry of list.entries){
-            if(entry.score != 0){
-                let i = Math.ceil(entry.score)
-                entries[i-1].push(entry)
-            }
-        }
-    }
-    return entries
-}*/
 </script>

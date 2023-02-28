@@ -1,15 +1,15 @@
 <template>
     <SearchBar :id="user?.id" @fetchUser="saveUser"/>
-    <TierList class="mx-10" :id="user?.id" :user="user"/>
+    <TierList class="mx-10" :id="user.id" :user="user"/>
 </template>
 
 <script setup lang="ts">
 import TierList from './components/TierList.vue';
 import SearchBar from './components/SearchBar.vue';
-import { userQuery } from './misc/queries';
+import { userQuery, userIdQuery } from './misc/queries';
+import { onMounted, ref } from 'vue';
 
-import { ref } from 'vue';
-
+/** User model returned by query */
 interface User {
     id: number,
     mediaListOptions: {
@@ -18,15 +18,22 @@ interface User {
 }
 
 const urlParams = new URLSearchParams(window.location.search);
+/** user has to be initialised with url params in case there's an id and fetch the user if there's an id */
 const user = ref(<User>{
     id: Number(urlParams.get("id"))
 })
 
+onMounted(async () => {
+    if(user.value.id != 0) user.value = <User> await fetchUser(user.value.id, userIdQuery);
+})
+
 async function saveUser(username: string): Promise<void>{
-    user.value = <User> await fetchUser(username);
+    user.value = <User> await fetchUser(username, userQuery);
 }
 
-async function fetchUser(username: string): Promise<User | null>{
+async function fetchUser(userIdentifier: string | number, query: any): Promise<User | null>{
+    const variables = typeof userIdentifier == "string" ? {name: userIdentifier} : {id: userIdentifier}
+
     const options = {
         method: 'POST',
         headers: {
@@ -34,10 +41,8 @@ async function fetchUser(username: string): Promise<User | null>{
             'Accept': 'application/json',
         },
         body: JSON.stringify({
-            query: userQuery,
-            variables: {
-                name: username
-            }
+            query: query,
+            variables: variables
         })
     };
 

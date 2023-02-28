@@ -30,4 +30,14 @@ query ($name: String){
     }
 }`
 
-export { animeCollectionsQuery, userQuery }
+const userIdQuery = `#graphql
+query ($id: Int){
+    User(id: $id){
+        id
+        mediaListOptions{
+            scoreFormat
+        }
+    }
+}`
+
+export { animeCollectionsQuery, userQuery, userIdQuery }
