@@ -1,7 +1,7 @@
 <template>
     <div class="py-5 px-6 block text-center md:flex md:justify-between md:items-center">
         <div class="flex items-center space-x-3">
-            <img :src="props.user?.avatar.medium" alt="Logo" width="64" height="64" class="rounded-full">
+            <img :src="props.user?.avatar?.medium" :class="{invisible: props.user?.avatar?.medium === undefined}" width="48" height="48" class="rounded-full">
             <p class="text-xl font-bold mb-2 md:mb-0">{{ props.user?.name }}</p>
         </div>
         <div class="w-full text-center mb-2 md:mb-0">
