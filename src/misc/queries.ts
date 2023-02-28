@@ -24,6 +24,10 @@ const userQuery = `#graphql
 query ($name: String){
     User(name: $name){
         id
+        name
+        avatar{
+          medium
+        }
         mediaListOptions{
             scoreFormat
         }
@@ -34,6 +38,10 @@ const userIdQuery = `#graphql
 query ($id: Int){
     User(id: $id){
         id
+        name
+        avatar{
+          medium
+        }
         mediaListOptions{
             scoreFormat
         }

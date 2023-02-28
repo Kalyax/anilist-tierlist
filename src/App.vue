@@ -1,5 +1,5 @@
 <template>
-    <SearchBar :id="user?.id" @fetchUser="saveUser"/>
+    <SearchBar :id="user.id" :user="user" @fetchUser="saveUser"/>
     <TierList class="mx-10" :id="user.id" :user="user"/>
 </template>
 
@@ -12,6 +12,10 @@ import { onMounted, ref } from 'vue';
 /** User model returned by query */
 interface User {
     id: number,
+    name: string,
+    avatar: {
+        medium: string
+    },
     mediaListOptions: {
         scoreFormat: string
     }
