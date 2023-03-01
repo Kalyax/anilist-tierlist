@@ -1,6 +1,6 @@
 const animeCollectionsQuery = `#graphql
-    query ($id: Int) {
-      MediaListCollection(userId: $id, type: ANIME){
+    query ($id: Int, $type: MediaType) {
+      MediaListCollection(userId: $id, type: $type){
         lists {
           isCustomList
           entries{

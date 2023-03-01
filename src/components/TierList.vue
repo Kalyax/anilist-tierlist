@@ -1,8 +1,12 @@
 <template>
     <section>
+        <div class="space-x-2 text-center mb-2">
+            <button :class="{ buttonActive: panelState == PanelState.ANIME, buttonNotActive: panelState == PanelState.MANGA }" @click="switchPanel(PanelState.ANIME)" class="transition-all px-2 py-1 rounded-xl">Anime</button>
+            <button :class="{ buttonActive: panelState == PanelState.MANGA, buttonNotActive: panelState == PanelState.ANIME }" @click="() => switchPanel(PanelState.MANGA)" class="transition-all px-2 py-1 rounded-xl">Manga</button>
+        </div>
         <div class="md:flex py-2 md:space-x-2" v-for="name of buildGroups(data)">
             <div :class="(groupsColors as any)[name]" 
-                class="w-full mb-3 md:mb-0 md:w-32 font-bold flex items-center justify-center text-3xl rounded-xl text-zinc-900">
+                class="w-full mb-3 md:mb-0 py-4 md:py-0 md:w-32 font-bold flex items-center justify-center text-3xl rounded-xl text-zinc-900">
                 {{ name }}
             </div>
             <div class="bg-zinc-800 rounded-xl p-3 flex flex-row flex-wrap w-full h-full">
@@ -26,13 +30,26 @@ const props = defineProps({
     user: Object
 });
 
+enum PanelState{
+    ANIME,
+    MANGA
+}
+
+const panelState = ref(PanelState.ANIME);
+
+function switchPanel(from: number){
+    if(from != panelState.value && props.user?.id) fetchEntries(props.user?.id, panelState.value == PanelState.ANIME ? "MANGA" : "ANIME")
+    if(from == PanelState.ANIME && panelState.value == PanelState.MANGA) panelState.value = PanelState.ANIME
+    else panelState.value = PanelState.MANGA
+}
+
 //Watches for id update
 watch(() => props.user?.id, (newVal) => {
-    if(newVal) fetchEntries(newVal)
+    if(newVal) fetchEntries(newVal, panelState.value == PanelState.ANIME ? "ANIME" : "MANGA")
 })
 
 onMounted(() => {
-    if(props.user?.id) fetchEntries(props.user?.id)
+    if(props.user?.id) fetchEntries(props.user?.id, panelState.value == PanelState.ANIME ? "ANIME" : "MANGA")
 })
 
 /** Sorts data retrived by the API call
@@ -145,7 +162,7 @@ const groupsColors = {
 
 const data: any = ref({});
 
-async function fetchEntries(userId: number): Promise<void>{
+async function fetchEntries(userId: number, type: string): Promise<void>{
     const options = {
         method: 'POST',
         headers: {
@@ -155,7 +172,8 @@ async function fetchEntries(userId: number): Promise<void>{
         body: JSON.stringify({
             query: animeCollectionsQuery,
             variables: {
-                id: userId
+                id: userId,
+                type: type
             }
         })
     };

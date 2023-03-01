@@ -5,3 +5,10 @@
 body{
     @apply bg-zinc-900 text-zinc-200;
 }
+
+.buttonActive{
+    @apply bg-zinc-200 hover:bg-zinc-300 text-zinc-900
+}
+.buttonNotActive{
+    @apply hover:bg-zinc-800 text-zinc-200
+}
