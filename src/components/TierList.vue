@@ -1,5 +1,13 @@
 <template>
-    <section>
+    <section v-if="fetchState == 0">
+        <p class="text-zinc-700 text-2xl text-center mt-10">Type an username to show a tierlist</p>
+    </section>
+    <section v-else-if="fetchState == 1">
+        <div class="absolute right-1/2 bottom-1/2  transform translate-x-1/2 translate-y-1/2 ">
+            <div class="border-t-transparent border-solid animate-spin  rounded-full border-zinc-700 border-4 h-32 w-32"></div>
+        </div>
+    </section>
+    <section v-else>
         <div class="space-x-2 text-center mb-2">
             <button :class="{ buttonActive: panelState == PanelState.ANIME, buttonNotActive: panelState == PanelState.MANGA }" @click="switchPanel(PanelState.ANIME)" class="transition-all px-2 py-1 rounded-xl">Anime</button>
             <button :class="{ buttonActive: panelState == PanelState.MANGA, buttonNotActive: panelState == PanelState.ANIME }" @click="() => switchPanel(PanelState.MANGA)" class="transition-all px-2 py-1 rounded-xl">Manga</button>
@@ -26,9 +34,10 @@ import { onMounted, ref, watch } from 'vue';
 import { animeCollectionsQuery } from './../misc/queries';
 
 const props = defineProps({
-    id: Number,
     user: Object
 });
+
+const fetchState = ref(0)
 
 enum PanelState{
     ANIME,
@@ -153,16 +162,17 @@ function buildGroups(data: any){
 
 const groupsColors = {
     S: "bg-red-400",
-    A: "bg-orange-300",
+    A: "bg-orange-400",
     B: "bg-amber-400",
     C: "bg-yellow-300",
-    D: "bg-green-400",
+    D: "bg-lime-400",
     E: "bg-green-400"
 }
 
 const data: any = ref({});
 
 async function fetchEntries(userId: number, type: string): Promise<void>{
+    fetchState.value = 1
     const options = {
         method: 'POST',
         headers: {
@@ -182,9 +192,11 @@ async function fetchEntries(userId: number, type: string): Promise<void>{
         const res = await fetch('https://graphql.anilist.co', options);
         const json = await res.json()
         data.value = formatData(json.data)
+        fetchState.value = 2
     } catch (err) {
         //TODO: Popup error
-        console.log("ERROR: FETCH DATA ERROR")
+        console.error("Error: Couldn't fetch user data")
+
     }
 }
 </script>

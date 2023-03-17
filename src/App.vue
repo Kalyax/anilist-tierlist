@@ -1,6 +1,6 @@
 <template>
-    <SearchBar :id="user.id" :user="user" @fetchUser="saveUser"/>
-    <TierList class="mx-10" :id="user.id" :user="user"/>
+    <SearchBar :user="user" @fetchUser="saveUser"/>
+    <TierList class="mx-10" :user="user"/>
 </template>
 
 <script setup lang="ts">
@@ -57,7 +57,7 @@ async function fetchUser(userIdentifier: string | number, query: any): Promise<U
         return <User> json.data.User
     } catch (err) {
         //TODO: POPUP ERROR
-        console.log("ERROR: NOT FOUND USER")
+        console.error("Error: Couldn't find user")
     }
     return null;
 }
