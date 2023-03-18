@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 body{
-    @apply bg-zinc-900 text-zinc-200;
+    @apply bg-slate-900 text-slate-200;
 }
 
 .buttonActive{
-    @apply bg-zinc-200 hover:bg-zinc-300 text-zinc-900
+    @apply bg-slate-200 hover:bg-slate-300 text-slate-900
 }
 .buttonNotActive{
-    @apply hover:bg-zinc-800 text-zinc-200
+    @apply hover:bg-slate-800 text-slate-200
 }

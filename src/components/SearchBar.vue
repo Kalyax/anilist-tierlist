@@ -6,7 +6,7 @@
         </a>
         <div class="w-full text-center mb-2 md:mb-0">
             <input v-model="username" type="text" 
-                class="w-2/5 bg-zinc-800 hover:bg-zinc-800/80 focus:bg-zinc-800/50 transition-colors px-4 py-2 rounded-xl outline-none" 
+                class="w-2/5 bg-slate-800 hover:bg-slate-800/80 focus:bg-slate-800/50 transition-colors px-4 py-2 rounded-xl outline-none" 
                 placeholder="Type an username...">
             <button 
                 class="bg-sky-500 hover:bg-sky-600 focus:bg-green-500 transition-colors duration-300 font-bold rounded-xl ml-3 px-3 py-2" 
@@ -15,7 +15,7 @@
             </button>
             <input type="text" :value="getLink" id="link" class="hidden">
         </div>
-        <a target="_blank" class="hover:animate-pulse md:hover:bg-zinc-800 rounded-full p-2 transition-all" href="https://github.com/Kalyax/anilist-tierlist">
+        <a target="_blank" class="hover:animate-pulse md:hover:bg-slate-800 rounded-full p-2 transition-all" href="https://github.com/Kalyax/anilist-tierlist">
             <img class="mx-auto md:mx-0" src="/img/github-mark-white.svg" alt="Github" width="32">
         </a>
     </div>
