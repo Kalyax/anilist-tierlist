@@ -1,8 +1,8 @@
 <template>
     <div class="py-5 px-6 block text-center md:flex md:justify-between md:items-center">
-        <a :href="userLink" target="_blank" class="justify-center md:justify-start mb-3 md:mb-0 flex items-center space-x-3" :class="{invisible: props.user?.avatar?.medium === undefined}">
-            <img :src="props.user?.avatar?.medium" width="48" height="48" class="rounded-full">
-            <p class="text-xl font-bold mb-2 md:mb-0">{{ props.user?.name }}</p>
+        <a :href="userLink" target="_blank" class="justify-center md:justify-start mb-3 md:mb-0 flex items-center space-x-3" :class="{invisible: userStore.info.avatar?.medium === undefined}">
+            <img :src="userStore.info.avatar?.medium" width="48" height="48" class="rounded-full">
+            <p class="text-xl font-bold mb-2 md:mb-0">{{ userStore.info.name }}</p>
         </a>
         <div class="w-full text-center mb-2 md:mb-0">
             <input v-model="username" type="text" 
@@ -22,17 +22,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed, defineProps } from 'vue'
+import { ref, watch, computed } from 'vue'
+import { useUserStore } from './../stores/userStore';
+
+const userStore = useUserStore()
 
 const emit = defineEmits(["fetchUser"])
 const username = ref()
 
 const userLink = computed(() => {
-    return "https://anilist.co/user/" + props.user?.name
-})
-
-const props = defineProps({
-    user: Object
+    return "https://anilist.co/user/" + userStore.info.name
 })
 
 /** Watches the username input */
@@ -46,9 +45,11 @@ watch(username, (val) => {
 
 /** Copy button functions */
 const getLink = computed(() => {
+    if(userStore.info.id == undefined) return null;
+
     const url = new URL(window.location.href);
     const searchParams = url.searchParams;
-    searchParams.set('id', props.user?.id);
+    searchParams.set('id', <string><unknown>userStore.info.id)
     url.search = searchParams.toString();
     return url.toString();
 })

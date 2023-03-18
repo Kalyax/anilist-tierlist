@@ -1,7 +1,9 @@
 {
   "name": "anilist-tierlist",
   "version": "1.0.0",
-  "author": {"name": "Kalyax"},
+  "author": {
+    "name": "Kalyax"
+  },
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -12,6 +14,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "pinia": "^2.0.33",
     "vue": "^3.2.45"
   },
   "devDependencies": {

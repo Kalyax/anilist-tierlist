@@ -1,5 +1,5 @@
 <template>
-    <SearchBar :user="user" @fetchUser="(username: string) => fetchUser(username)"/>
+    <SearchBar @fetchUser="(username: string) => fetchUser(username)"/>
     <TierList class="mx-10" :user="user"/>
 </template>
 
@@ -9,6 +9,9 @@ import SearchBar from './components/SearchBar.vue';
 import { userQuery, userIdQuery } from './misc/queries';
 import { onMounted, ref } from 'vue';
 import fetchData from './misc/fetchData';
+import { useUserStore } from './stores/userStore';
+
+const userStore = useUserStore()
 
 interface User {
     id: number,
@@ -42,7 +45,10 @@ async function fetchUser(userIdentifier: string | number){
     fetchData(query, variables)
         .then((res) => {
             if(res.data.User === null) console.error("No user found with this name")
-            else user.value = <User> res.data.User
+            else {
+                user.value = <User> res.data.User
+                userStore.info = res.data.User
+            }
         })
         .catch((err) => {
             throw err;
