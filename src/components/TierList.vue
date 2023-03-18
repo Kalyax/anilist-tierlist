@@ -2,17 +2,17 @@
     <section v-if="fetchState == 0">
         <p class="text-zinc-700 text-2xl text-center mt-10">Type an username to show a tierlist</p>
     </section>
-    <section v-else-if="fetchState == 1">
-        <div class="absolute right-1/2 bottom-1/2  transform translate-x-1/2 translate-y-1/2 ">
-            <div class="border-t-transparent border-solid animate-spin  rounded-full border-zinc-700 border-4 h-32 w-32"></div>
-        </div>
-    </section>
     <section v-else>
         <div class="space-x-2 text-center mb-2">
             <button :class="{ buttonActive: panelState == PanelState.ANIME, buttonNotActive: panelState == PanelState.MANGA }" @click="switchPanel(PanelState.ANIME)" class="transition-all px-2 py-1 rounded-xl">Anime</button>
             <button :class="{ buttonActive: panelState == PanelState.MANGA, buttonNotActive: panelState == PanelState.ANIME }" @click="() => switchPanel(PanelState.MANGA)" class="transition-all px-2 py-1 rounded-xl">Manga</button>
         </div>
-        <div class="md:flex py-2 md:space-x-2" v-for="name of buildGroups(data)">
+        
+        <div v-if="fetchState == 1" class="absolute right-1/2 bottom-1/2  transform translate-x-1/2 translate-y-1/2 ">
+            <div class="border-t-transparent border-solid animate-spin  rounded-full border-zinc-700 border-4 h-32 w-32"></div>
+        </div>
+
+        <div v-else class="md:flex py-2 md:space-x-2" v-for="name of buildGroups(data)">
             <div :class="(groupsColors as any)[name]" 
                 class="w-full mb-3 md:mb-0 py-4 md:py-0 md:w-32 font-bold flex items-center justify-center text-3xl rounded-xl text-zinc-900">
                 {{ name }}
