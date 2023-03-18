@@ -4,8 +4,8 @@
     </section>
     <section v-else>
         <div class="space-x-2 text-center mb-2">
-            <button :class="{ buttonActive: panelState == PanelState.ANIME, buttonNotActive: panelState == PanelState.MANGA }" @click="switchPanel(PanelState.ANIME)" class="transition-all px-2 py-1 rounded-xl">Anime</button>
-            <button :class="{ buttonActive: panelState == PanelState.MANGA, buttonNotActive: panelState == PanelState.ANIME }" @click="() => switchPanel(PanelState.MANGA)" class="transition-all px-2 py-1 rounded-xl">Manga</button>
+            <button :class="{ buttonActive: panelState == MediaType.ANIME, buttonNotActive: panelState == MediaType.MANGA }" @click="switchPanel(MediaType.ANIME)" class="transition-all px-2 py-1 rounded-xl">Anime</button>
+            <button :class="{ buttonActive: panelState == MediaType.MANGA, buttonNotActive: panelState == MediaType.ANIME }" @click="() => switchPanel(MediaType.MANGA)" class="transition-all px-2 py-1 rounded-xl">Manga</button>
         </div>
         
         <div v-if="fetchState == 1" class="absolute right-1/2 bottom-1/2  transform translate-x-1/2 translate-y-1/2 ">
@@ -32,171 +32,66 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 import { animeCollectionsQuery } from './../misc/queries';
+import { buildGroups, formatMedia, groupsColors } from '@/misc/sortData';
+import fetchData from './../misc/fetchData';
 
 const props = defineProps({
     user: Object
 });
 
-const fetchState = ref(0)
-
-enum PanelState{
+enum MediaType{
     ANIME,
     MANGA
 }
 
-const panelState = ref(PanelState.ANIME);
+const data: any = ref({});
+const fetchState = ref(0)
+const panelState = ref(MediaType.ANIME);
 
+/**
+ * Switch from anime panel to manga panel
+ * @param from 
+ */
 function switchPanel(from: number){
-    if(from != panelState.value && props.user?.id) fetchEntries(props.user?.id, panelState.value == PanelState.ANIME ? "MANGA" : "ANIME")
-    if(from == PanelState.ANIME && panelState.value == PanelState.MANGA) panelState.value = PanelState.ANIME
-    else panelState.value = PanelState.MANGA
+    const hasChanged = from != panelState.value;
+
+    if(from == MediaType.ANIME && panelState.value == MediaType.MANGA) 
+        panelState.value = MediaType.ANIME
+    else 
+        panelState.value = MediaType.MANGA
+
+    //fetch new MediaType
+    if(hasChanged && props.user?.id) 
+        fetchEntries(props.user?.id, panelState.value)
 }
 
 //Watches for id update
 watch(() => props.user?.id, (newVal) => {
-    if(newVal) fetchEntries(newVal, panelState.value == PanelState.ANIME ? "ANIME" : "MANGA")
+    if(newVal) fetchEntries(newVal, panelState.value)
 })
 
+//when loaded with id param
 onMounted(() => {
-    if(props.user?.id) fetchEntries(props.user?.id, panelState.value == PanelState.ANIME ? "ANIME" : "MANGA")
+    if(props.user?.id) fetchEntries(props.user?.id, panelState.value)
 })
-
-/** Sorts data retrived by the API call
- * @param data
- */
-function formatData(data: any){
-    //TODO: factorize code later
-    const scoreFormat = props.user?.mediaListOptions.scoreFormat
-    let entries;
-    if(scoreFormat == "POINT_100" || scoreFormat == "POINT_10_DECIMAL" || scoreFormat == "POINT_10"){
-        entries = <any>{
-            S: [],
-            A: [],
-            B: [],
-            C: [],
-            D: [],
-            E: []
-        };
-
-        for(let list of data.MediaListCollection.lists){
-            if(list.isCustomList) break;
-            for(let entry of list.entries){
-                let score: number;
-
-                if(scoreFormat == "POINT_100") score = Math.floor(entry.score/10)
-                else if(scoreFormat == "POINT_10_DECIMAL") score = Math.floor(entry.score)
-                else score = entry.score
-
-                if(entry.score != 0){
-                    if(score == 10) entries.S.push(entry)
-                    else if(score == 9) entries.A.push(entry)
-                    else if(score == 8) entries.B.push(entry)
-                    else if(score == 7) entries.C.push(entry)
-                    else if(score == 6) entries.D.push(entry)
-                    else entries.E.push(entry)
-                }
-            }
-        }
-    }
-    else if(scoreFormat == "POINT_5"){
-        entries = <any>{
-            S: [],
-            A: [],
-            B: [],
-            C: [],
-            D: [],
-            E: []
-        };
-
-        for(let list of data.MediaListCollection.lists){
-            if(list.isCustomList) break;
-            for(let entry of list.entries){
-                let score: number = entry.score
-
-                if(score != 0){
-                    if(score == 5) entries.S.push(entry)
-                    else if(score == 4) entries.A.push(entry)
-                    else if(score == 3) entries.B.push(entry)
-                    else if(score == 2) entries.C.push(entry)
-                    else entries.D.push(entry)
-                }
-            }
-        }
-    }
-    else if(scoreFormat == "POINT_3"){
-        entries = <any>{
-            S: [],
-            A: [],
-            B: []
-        };
-
-        for(let list of data.MediaListCollection.lists){
-            if(list.isCustomList) break;
-            for(let entry of list.entries){
-                let score: number = entry.score
-
-                if(score != 0){
-                    if(score == 3) entries.S.push(entry)
-                    else if(score == 2) entries.A.push(entry)
-                    else entries.B.push(entry)
-                }
-            }
-        }
-    }
-    return entries
-}
 
 /**
- * Returns all tiers where there's is at least one element
- * @param data
+ * 
+ * @param userId 
+ * @param type Panel
  */
-function buildGroups(data: any){
-    let groupList: string[] = []
-    for(let key of Object.keys(data)){
-        if (data[key].length > 0){
-            groupList.push(key)
-        }
-    }
-    return groupList
-}
-
-const groupsColors = {
-    S: "bg-red-400",
-    A: "bg-orange-400",
-    B: "bg-amber-400",
-    C: "bg-yellow-300",
-    D: "bg-lime-400",
-    E: "bg-green-400"
-}
-
-const data: any = ref({});
-
-async function fetchEntries(userId: number, type: string): Promise<void>{
+async function fetchEntries(userId: number, type: MediaType){
     fetchState.value = 1
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-            query: animeCollectionsQuery,
-            variables: {
-                id: userId,
-                type: type
-            }
-        })
-    };
 
-    try {
-        const res = await fetch('https://graphql.anilist.co', options);
-        const json = await res.json()
-        data.value = formatData(json.data)
-        fetchState.value = 2
-    } catch (err) {
-        //TODO: Popup error
-        console.error("Error: Couldn't fetch user data")
-
+    const variables = {
+        id: userId,
+        type: MediaType[type]
     }
+    fetchData(animeCollectionsQuery, variables)
+        .then((res) => {
+            data.value = formatMedia(res.data, props.user?.mediaListOptions.scoreFormat)
+            fetchState.value = 2
+        })
+        .catch(err => {throw err;})
 }
 </script>

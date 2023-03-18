@@ -1,5 +1,5 @@
 <template>
-    <SearchBar :user="user" @fetchUser="saveUser"/>
+    <SearchBar :user="user" @fetchUser="(username: string) => fetchUser(username)"/>
     <TierList class="mx-10" :user="user"/>
 </template>
 
@@ -8,8 +8,8 @@ import TierList from './components/TierList.vue';
 import SearchBar from './components/SearchBar.vue';
 import { userQuery, userIdQuery } from './misc/queries';
 import { onMounted, ref } from 'vue';
+import fetchData from './misc/fetchData';
 
-/** User model returned by query */
 interface User {
     id: number,
     name: string,
@@ -26,39 +26,26 @@ const urlParams = new URLSearchParams(window.location.search);
 const user = ref(<User>{
     id: Number(urlParams.get("id"))
 })
-
+/** if there is an id param, fetch the user when mounted */
 onMounted(async () => {
-    if(user.value.id != 0) user.value = <User> await fetchUser(user.value.id, userIdQuery);
+    if(user.value.id != 0) fetchUser(user.value.id)
 })
 
-async function saveUser(username: string): Promise<void>{
-    user.value = <User> await fetchUser(username, userQuery);
-}
-
-async function fetchUser(userIdentifier: string | number, query: any): Promise<User | null>{
-    const variables = typeof userIdentifier == "string" ? {name: userIdentifier} : {id: userIdentifier}
-
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-            query: query,
-            variables: variables
+/**
+ * Fetches user data based on a given username or id
+ * @param userIdentifier 
+ */
+async function fetchUser(userIdentifier: string | number){
+    const isName = typeof userIdentifier == "string"
+    const variables = isName ? {name: userIdentifier} : {id: userIdentifier}
+    const query = isName ? userQuery : userIdQuery
+    fetchData(query, variables)
+        .then((res) => {
+            if(res.data.User === null) console.error("No user found with this name")
+            else user.value = <User> res.data.User
         })
-    };
-
-    try {
-        const res = await fetch('https://graphql.anilist.co', options);
-        const json = await res.json()
-        if(json.data.User === null) throw Error()
-        return <User> json.data.User
-    } catch (err) {
-        //TODO: POPUP ERROR
-        console.error("Error: Couldn't find user")
-    }
-    return null;
+        .catch((err) => {
+            throw err;
+        })
 }
 </script>
