@@ -18,11 +18,12 @@
                 {{ name }}
             </div>
             <div class="bg-slate-800 rounded-xl p-3 flex flex-row flex-wrap w-full h-full">
-                <a class="m-1" :href="entry.media.siteUrl" target="_blank" 
+                <a class="m-1 group" :href="entry.media.siteUrl" target="_blank" 
                     v-for="entry of userStore.media[name]">
                     <img
                         class="rounded-xl w-16 sm:w-20 md:w-24 h-full" 
                         :src="entry.media.coverImage.medium" :alt="entry.media.title.english">
+                    <div class="z-50 hidden absolute group-hover:block max-w-xl text-center bg-slate-700 rounded-xl font-bold text-sm px-3 py-1 mt-1 shadow-xl">{{ entry.media.title.english }}</div>
                 </a>
             </div>
         </div>
@@ -55,17 +56,17 @@ function switchPanel(from: number){
     
     panelState.value = from
     if(userStore.info.id != undefined)
-        fetchEntries(userStore.info.id, panelState.value)
+        fetchMedia(userStore.info.id, panelState.value)
 }
 
 //Watches for id update
 watch(() => userStore.info.id, (newVal) => {
-    if(newVal) fetchEntries(newVal, panelState.value)
+    if(newVal) fetchMedia(newVal, panelState.value)
 })
 
 //when loaded with id param
 onMounted(() => {
-    if(userStore.info.id) fetchEntries(userStore.info.id, panelState.value)
+    if(userStore.info.id) fetchMedia(userStore.info.id, panelState.value)
 })
 
 /**
@@ -73,7 +74,7 @@ onMounted(() => {
  * @param userId 
  * @param type Panel
  */
-async function fetchEntries(userId: number, type: MediaType){
+async function fetchMedia(userId: number, type: MediaType){
     fetchState.value = 1
 
     const variables = {
