@@ -13,6 +13,11 @@
                 @click="copyLink">
                 Copy link
             </button>
+            <button 
+                class="bg-sky-500 hover:bg-sky-600 focus:bg-green-500 transition-colors duration-300 font-bold rounded-xl ml-3 px-3 py-2" 
+                @click="$emit('openSettings')">
+                Settings
+            </button>
             <input type="text" :value="getLink" id="link" class="hidden">
         </div>
         <a target="_blank" class="hover:animate-pulse md:hover:bg-slate-800 rounded-full p-2 transition-all" href="https://github.com/Kalyax/anilist-tierlist">
@@ -27,7 +32,7 @@ import { useUserStore } from './../stores/userStore';
 
 const userStore = useUserStore()
 
-const emit = defineEmits(["fetchUser"])
+const emit = defineEmits(["fetchUser", "openSettings"])
 const username = ref()
 
 const userLink = computed(() => {

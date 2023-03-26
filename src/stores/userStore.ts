@@ -1,21 +1,13 @@
 import { defineStore } from 'pinia'
 
-interface User {
-    id?: number,
-    name?: string,
-    avatar?: {
-        medium?: string
-    },
-    mediaListOptions?: {
-        scoreFormat?: string
-    }
-}
+import type { User, Settings, Tiers } from './../misc/types';
+import { tenScoreFormat } from './../misc/defaultTiers';
 
 export const useUserStore = defineStore("user", () => {
     const info: User = {}
     const media: any = {}
-    const settings: Object = {
-
+    const settings: Settings = {
+        tiers: tenScoreFormat as Tiers[]
     }
 
     return { info, media, settings }
