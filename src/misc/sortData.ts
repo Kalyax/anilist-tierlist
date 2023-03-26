@@ -38,7 +38,7 @@ export function formatMedia(data: any, scoreFormat: string){
         };
 
         for(let list of data.MediaListCollection.lists){
-            if(list.isCustomList) break;
+            if(list.isCustomList) continue;
             for(let entry of list.entries){
                 let score: number;
 
@@ -68,7 +68,7 @@ export function formatMedia(data: any, scoreFormat: string){
         };
 
         for(let list of data.MediaListCollection.lists){
-            if(list.isCustomList) break;
+            if(list.isCustomList) continue;
             for(let entry of list.entries){
                 let score: number = entry.score
 
@@ -90,7 +90,7 @@ export function formatMedia(data: any, scoreFormat: string){
         };
 
         for(let list of data.MediaListCollection.lists){
-            if(list.isCustomList) break;
+            if(list.isCustomList) continue;
             for(let entry of list.entries){
                 let score: number = entry.score
 
