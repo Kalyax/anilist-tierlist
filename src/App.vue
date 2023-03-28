@@ -16,7 +16,7 @@ import { useUserStore }   from './stores/userStore';
 import { userQuery, userIdQuery } from './misc/queries/queries';
 import fetchData                  from './misc/queries/fetchData';
 import type { User } from './misc/types'
-import { sortMedia, setupTiers } from './misc/tiers/tierSorter';
+import { sortMedia, setupDefaultTiers } from './misc/tiers/tierSorter';
 
 const userStore = useUserStore()
 
@@ -45,7 +45,7 @@ async function fetchUser(userIdentifier: string | number){
                 userStore.info = <User> res.data.User;
                 const tiers = urlParams.get("tiers");
                 if(tiers) userStore.tiers = JSON.parse(decodeURI(tiers))
-                else setupTiers(userStore);
+                else setupDefaultTiers(userStore);
             }
         })
         .catch((err) => {

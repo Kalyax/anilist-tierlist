@@ -1,13 +1,13 @@
 import type { Tier } from "../types"
 
-export const groupsColors = {
+/*export const groupsColors = {
     S: "bg-red-400",
     A: "bg-orange-400",
     B: "bg-amber-400",
     C: "bg-yellow-300",
     D: "bg-lime-400",
     E: "bg-green-400"
-}
+}*/
 
 export const tenScoreFormat: Tier[] = [
     {

@@ -7,7 +7,7 @@ import { useUserStore } from "@/stores/userStore";
  * setup default tier settings according to scoreFormat value
  * @param userStore 
  */
-export function setupTiers(userStore: any){
+export function setupDefaultTiers(userStore: any){
     const scoreFormat: ScoreFormat = <ScoreFormat> userStore.info.mediaListOptions?.scoreFormat;
     if(scoreFormat == ScoreFormat.POINT_10 || scoreFormat == ScoreFormat.POINT_10_DECIMAL)
         userStore.tiers = tenScoreFormat;
