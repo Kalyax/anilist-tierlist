@@ -1,7 +1,7 @@
 <template>
     <SearchBar @fetchUser="(username: string) => fetchUser(username)" @openSettings="settingsState = false"/>
     <TierList class="mx-10"/>
-    <SettingsPopup :class="{'hidden': settingsState}" @closeSettings="settingsState = true"/>
+    <SettingsPopup :class="{'hidden': settingsState}" @closeSettings="settingsState = true; sortMedia()"/>
 </template>
 
 <script setup lang="ts">
@@ -13,10 +13,10 @@ import { onMounted, ref } from 'vue';
 
 import { useUserStore }   from './stores/userStore';
 
-import { userQuery, userIdQuery } from './misc/queries';
-import fetchData                  from './misc/fetchData';
-import { ScoreFormat, type User } from './misc/types'
-import { tenScoreFormat }         from './misc/defaultTiers';
+import { userQuery, userIdQuery } from './misc/queries/queries';
+import fetchData                  from './misc/queries/fetchData';
+import type { User } from './misc/types'
+import { sortMedia, setupTiers } from './misc/tiers/tierSorter';
 
 const userStore = useUserStore()
 
@@ -42,12 +42,8 @@ async function fetchUser(userIdentifier: string | number){
         .then((res) => {
             if(res.data.User === null) console.error("No user found with this name")
             else {
-                userStore.info = <User> res.data.User
-                const scoreFormat: ScoreFormat = <ScoreFormat> userStore.info.mediaListOptions?.scoreFormat
-                if(scoreFormat == ScoreFormat.POINT_10 || scoreFormat == ScoreFormat.POINT_100 || scoreFormat == ScoreFormat.POINT_10_DECIMAL){
-                    userStore.settings.tiers = tenScoreFormat
-                }
-                //else
+                userStore.info = <User> res.data.User;
+                setupTiers(userStore);
             }
         })
         .catch((err) => {

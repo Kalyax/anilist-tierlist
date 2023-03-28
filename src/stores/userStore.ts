@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia'
 
-import type { User, Settings, Tiers } from './../misc/types';
-import { tenScoreFormat } from './../misc/defaultTiers';
+import type { User, Tier, List, Entry } from './../misc/types';
 
 export const useUserStore = defineStore("user", () => {
-    const info: User = {}
-    const media: any = {}
-    const settings: Settings = {
-        tiers: tenScoreFormat as Tiers[]
-    }
+    const info: User = {} as User;
+    //const media: any = {}
+    const lists: Array<List> = [];
 
-    return { info, media, settings }
+    const sortedTiers: Array<Array<Entry>> = [];
+    const tiers : Tier[] = [];
+
+    return { info, tiers, lists, sortedTiers }
 })

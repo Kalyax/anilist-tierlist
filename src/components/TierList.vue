@@ -12,18 +12,20 @@
             <div class="border-t-transparent border-solid animate-spin  rounded-full border-slate-700 border-4 h-32 w-32"></div>
         </div>
 
-        <div v-else class="md:flex py-2 md:space-x-2" v-for="name of buildGroups(userStore.media)">
-            <div :class="(groupsColors as any)[name]" 
+        <div v-else class="md:flex py-2 md:space-x-2" v-for="tier, index of computedTiers">
+            <div :class="tier.color" 
                 class="w-full mb-3 md:mb-0 py-4 md:py-0 md:w-32 font-bold flex items-center justify-center text-3xl rounded-xl text-slate-900">
-                {{ name }}
+                {{ tier.name }}
             </div>
             <div class="bg-slate-800 rounded-xl p-3 flex flex-row flex-wrap w-full h-full">
-                <a class="m-1 group" :href="entry.media.siteUrl" target="_blank" 
-                    v-for="entry of userStore.media[name]">
+                <a v-for="entry of userStore.sortedTiers[index]" :href="entry.media.siteUrl" class="m-1 group" target="_blank" >
                     <img
                         class="rounded-xl w-16 sm:w-20 md:w-24 h-full" 
                         :src="entry.media.coverImage.medium" :alt="entry.media.title.english">
-                    <div class="z-50 hidden absolute group-hover:block max-w-xl text-center bg-slate-700 rounded-xl font-bold text-sm px-3 py-1 mt-1 shadow-xl">{{ entry.media.title.english }}</div>
+                    <div class="z-50 hidden absolute group-hover:block max-w-xl text-center bg-slate-700 rounded-xl font-bold text-sm px-3 py-1 mt-1 shadow-xl">
+                        {{ entry.media.title.english }}
+                        {{ entry.score }}
+                    </div>
                 </a>
             </div>
         </div>
@@ -31,20 +33,46 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
-import { animeCollectionsQuery } from './../misc/queries';
-import { buildGroups, formatMedia, groupsColors } from '@/misc/sortData';
-import fetchData from './../misc/fetchData';
+import { onMounted, ref, watch, computed } from 'vue';
+
+
 import { useUserStore } from './../stores/userStore';
+
+import { animeCollectionsQuery } from '../misc/queries/queries';
+import fetchData from '../misc/queries/fetchData';
+import { type List, MediaType } from '@/misc/types';
+import { sortMedia } from '@/misc/tiers/tierSorter';
 
 const userStore = useUserStore()
 
-enum MediaType{
-    ANIME,
-    MANGA
-}
 const fetchState = ref(0)
 const panelState = ref(MediaType.ANIME);
+
+const computedTiers = computed(() => userStore.tiers.filter((_, index) => userStore.sortedTiers[index].length != 0));
+
+/**
+ * Fetch media from userId profile
+ * @param userId 
+ * @param type Panel
+ */
+async function fetchMedia(userId: number){
+    fetchState.value = 1
+
+    const variables = {
+        id: userId,
+        type: MediaType[panelState.value]
+    }
+    fetchData(animeCollectionsQuery, variables)
+        .then((res) => {
+            if(userStore.info.mediaListOptions?.scoreFormat != undefined){
+                //userStore.media = formatMedia(res.data, userStore.info.mediaListOptions.scoreFormat.toString())
+                userStore.lists = <Array<List>> res.data.MediaListCollection.lists
+                sortMedia()
+                fetchState.value = 2
+            }
+        })
+        .catch(err => {throw err;})
+}
 
 /**
  * Switch from anime panel to manga panel
@@ -56,38 +84,16 @@ function switchPanel(from: number){
     
     panelState.value = from
     if(userStore.info.id != undefined)
-        fetchMedia(userStore.info.id, panelState.value)
+        fetchMedia(userStore.info.id)
 }
 
 //Watches for id update
 watch(() => userStore.info.id, (newVal) => {
-    if(newVal) fetchMedia(newVal, panelState.value)
+    if(newVal) fetchMedia(newVal)
 })
 
 //when loaded with id param
 onMounted(() => {
-    if(userStore.info.id) fetchMedia(userStore.info.id, panelState.value)
+    if(userStore.info.id) fetchMedia(userStore.info.id)
 })
-
-/**
- * 
- * @param userId 
- * @param type Panel
- */
-async function fetchMedia(userId: number, type: MediaType){
-    fetchState.value = 1
-
-    const variables = {
-        id: userId,
-        type: MediaType[type]
-    }
-    fetchData(animeCollectionsQuery, variables)
-        .then((res) => {
-            if(userStore.info.mediaListOptions?.scoreFormat != undefined){
-                userStore.media = formatMedia(res.data, userStore.info.mediaListOptions.scoreFormat)
-                fetchState.value = 2
-            }
-        })
-        .catch(err => {throw err;})
-}
 </script>
