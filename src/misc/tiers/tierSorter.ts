@@ -19,6 +19,12 @@ export function setupDefaultTiers(userStore: any){
         userStore.tiers = threeScoreFormat;
 }
 
+/*test usernames
+10 points decimal: Kalyax
+10 points: ?
+100 points: valgul
+5 star: readz
+3 star: ?*/
 export function sortMedia(){
     const userStore = useUserStore()
 
@@ -36,7 +42,8 @@ export function sortMedia(){
             for(let i in userStore.tiers){
                 let tier = userStore.tiers[i]
                 if(tier.to == null || tier.from == null) continue;
-                if((entry.score >= tier.to && (entry.score < tier.from || tier.to == tier.from))){
+                if((tier.to == tier.from && entry.score == tier.from)||(entry.score < tier.from && entry.score >= tier.to)){
+                    console.log(tier.name)
                     userStore.sortedTiers[i].push(entry)
                 }
             }
