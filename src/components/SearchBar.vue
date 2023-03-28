@@ -60,6 +60,7 @@ const getLink = computed(() => {
     const url = new URL(window.location.href);
     const searchParams = url.searchParams;
     searchParams.set('id', <string><unknown>userStore.info.id)
+    searchParams.set('tiers', encodeURI(JSON.stringify(userStore.tiers)))
     url.search = searchParams.toString();
     return url.toString();
 })

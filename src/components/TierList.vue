@@ -24,7 +24,6 @@
                         :src="entry.media.coverImage.medium" :alt="entry.media.title.english">
                     <div class="z-50 hidden absolute group-hover:block max-w-xl text-center bg-slate-700 rounded-xl font-bold text-sm px-3 py-1 mt-1 shadow-xl">
                         {{ entry.media.title.english }}
-                        {{ entry.score }}
                     </div>
                 </a>
             </div>

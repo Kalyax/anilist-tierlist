@@ -43,7 +43,9 @@ async function fetchUser(userIdentifier: string | number){
             if(res.data.User === null) console.error("No user found with this name")
             else {
                 userStore.info = <User> res.data.User;
-                setupTiers(userStore);
+                const tiers = urlParams.get("tiers");
+                if(tiers) userStore.tiers = JSON.parse(decodeURI(tiers))
+                else setupTiers(userStore);
             }
         })
         .catch((err) => {
