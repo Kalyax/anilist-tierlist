@@ -13,7 +13,8 @@ export interface Tier {
     name: String,
     color: String,
     from: number | null,
-    to: number | null
+    to: number | null,
+    entries?: Array<Entry>
 }
 
 export interface List {

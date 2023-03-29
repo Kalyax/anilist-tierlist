@@ -27,6 +27,7 @@ export function setupDefaultTiers(userStore: any){
 3 star: ?*/
 export function sortMedia(){
     const userStore = useUserStore()
+    console.log(userStore.info.mediaListOptions.scoreFormat)
 
     let i = 0;
 
@@ -43,7 +44,6 @@ export function sortMedia(){
                 let tier = userStore.tiers[i]
                 if(tier.to == null || tier.from == null) continue;
                 if((tier.to == tier.from && entry.score == tier.from)||(entry.score < tier.from && entry.score >= tier.to)){
-                    console.log(tier.name)
                     userStore.sortedTiers[i].push(entry)
                 }
             }
