@@ -9,27 +9,32 @@
                     </svg>
                 </button>
             </div>
-            <div class="text-center">
-                <h2 class="text-xl">Tiers</h2>
-                <p class="font-light italic text-sm  mb-2">From excluded, To included</p>
-                <div class="space-y-2">
-                    <button class="px-3 py-2 bg-cyan-600 hover:bg-cyan-700 transition-colors rounded-xl font-bold" @click="addTier()">Add tier</button>
-                    <div v-for="tier, i in userStore.tiers" class="flex items-center space-x-2">
-                        <p :class="tier.color" class="text-slate-900 font-bold text-xl w-10 text-center py-2 rounded-xl mr-1 group">
-                            {{ tier.name }}
-                            <div class="text-base hidden text-slate-200 bg-slate-900 group-hover:block absolute px-3 py-3 rounded-xl shadow-xl">
-                                <input type="text" v-model="userStore.tiers[i].name" class="mb-3 bg-slate-800 hover:bg-slate-800/80 focus:bg-slate-800/50 transition-colors px-4 py-1.5 rounded-xl outline-none">
-                                <div class="grid grid-cols-7 gap-3">
-                                    <button v-for="color in colors" @click="userStore.tiers[i].color = color">
-                                        <div class="h-6 w-6 rounded-full" :class="color"></div>
-                                    </button>
+            <div class="text-center flex">
+                <div>
+                    <h2 class="text-xl">Tiers</h2>
+                    <p class="font-light italic text-sm  mb-2">From excluded, To included</p>
+                    <div class="space-y-2">
+                        <button class="px-3 py-2 bg-cyan-600 hover:bg-cyan-700 transition-colors rounded-xl font-bold" @click="addTier()">Add tier</button>
+                        <div v-for="tier, i in userStore.tiers" class="flex items-center space-x-2">
+                            <p :class="tier.color" class="text-slate-900 font-bold text-xl w-10 text-center py-2 rounded-xl mr-1 group">
+                                {{ tier.name }}
+                                <div class="text-base hidden text-slate-200 bg-slate-900 group-hover:block absolute px-3 py-3 rounded-xl shadow-xl">
+                                    <input type="text" v-model="userStore.tiers[i].name" class="mb-3 bg-slate-800 hover:bg-slate-800/80 focus:bg-slate-800/50 transition-colors px-4 py-1.5 rounded-xl outline-none">
+                                    <div class="grid grid-cols-7 gap-3">
+                                        <button v-for="color in colors" @click="userStore.tiers[i].color = color">
+                                            <div class="h-6 w-6 rounded-full" :class="color"></div>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        </p>
-                        <input type="text" v-model="userStore.tiers[i].from" placeholder="From" class="w-20 bg-slate-700 hover:bg-slate-700/80 focus:bg-slate-700/50 transition-colors px-4 py-2 rounded-xl outline-none">
-                        <input type="text" v-model="userStore.tiers[i].to" placeholder="To" class="w-20 bg-slate-700 hover:bg-slate-700/80 focus:bg-slate-700/50 transition-colors px-4 py-2 rounded-xl outline-none">
-                        <button class="px-3 py-1.5 hover:bg-slate-600 transition-colors rounded-xl font-bold" @click="removeTier(i)">Remove tier</button>
+                            </p>
+                            <input type="text" v-model="userStore.tiers[i].from" placeholder="From" class="w-20 bg-slate-700 hover:bg-slate-700/80 focus:bg-slate-700/50 transition-colors px-4 py-2 rounded-xl outline-none">
+                            <input type="text" v-model="userStore.tiers[i].to" placeholder="To" class="w-20 bg-slate-700 hover:bg-slate-700/80 focus:bg-slate-700/50 transition-colors px-4 py-2 rounded-xl outline-none">
+                            <button class="px-3 py-1.5 hover:bg-slate-600 transition-colors rounded-xl font-bold" @click="removeTier(i)">Remove tier</button>
+                        </div>
                     </div>
+                </div>
+                <div>
+                    <h2 class="text-xl">Hidden Formats</h2>
                 </div>
             </div>
         </div>
@@ -62,7 +67,7 @@ const colors = [
 ]
 
 function addTier(){
-    userStore.sortedTiers.push([])
+    userStore.settings.sortedTiers.push([])
     userStore.tiers.push({
         name: "X",
         color: "bg-slate-200",

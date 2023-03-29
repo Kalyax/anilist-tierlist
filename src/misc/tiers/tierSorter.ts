@@ -1,4 +1,4 @@
-import { ScoreFormat } from "../types";
+import { MediaFormat, ScoreFormat } from "../types";
 import { tenScoreFormat, hundredScoreFormat, fiveScoreFormat, threeScoreFormat } from "./defaultTiers";
 
 import { useUserStore } from "@/stores/userStore";
@@ -27,24 +27,24 @@ export function setupDefaultTiers(userStore: any){
 3 star: ?*/
 export function sortMedia(){
     const userStore = useUserStore()
-    console.log(userStore.info.mediaListOptions.scoreFormat)
 
     let i = 0;
 
-    userStore.sortedTiers = []
+    userStore.settings.sortedTiers = []
     while(i < userStore.tiers.length){
-        userStore.sortedTiers.push([])
+        userStore.settings.sortedTiers.push([])
         i++;
     }
 
     for(let list of userStore.lists){
         if(list.isCustomList) continue;
         for(let entry of list.entries){
+            if(userStore.settings.hiddenFormats.includes(entry.media.format)) continue;
             for(let i in userStore.tiers){
                 let tier = userStore.tiers[i]
                 if(tier.to == null || tier.from == null) continue;
                 if((tier.to == tier.from && entry.score == tier.from)||(entry.score < tier.from && entry.score >= tier.to)){
-                    userStore.sortedTiers[i].push(entry)
+                    userStore.settings.sortedTiers[i].push(entry)
                 }
             }
         }

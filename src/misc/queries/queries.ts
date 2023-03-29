@@ -8,6 +8,7 @@ const animeCollectionsQuery = `#graphql
             media{
               id
               siteUrl
+              format
               title{
                 english
               }

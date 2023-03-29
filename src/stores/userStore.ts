@@ -1,13 +1,15 @@
 import { defineStore } from 'pinia'
 
-import type { User, Tier, List, Entry } from './../misc/types';
+import { type User, type Tier, type List, type Settings, MediaFormat } from './../misc/types';
 
 export const useUserStore = defineStore("user", () => {
     const info: User = {} as User;
     const lists: Array<List> = [];
-
-    const sortedTiers: Array<Array<Entry>> = [];
     const tiers : Array<Tier> = [];
+    const settings: Settings = {
+        sortedTiers: [],
+        hiddenFormats: [MediaFormat.MOVIE]
+    }
 
-    return { info, tiers, lists, sortedTiers }
+    return { info, tiers, lists, settings }
 })

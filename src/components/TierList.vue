@@ -23,7 +23,7 @@
                         class="rounded-xl w-16 sm:w-20 md:w-24 h-full" 
                         :src="entry.media.coverImage.medium" :alt="entry.media.title.english">
                     <div class="z-50 hidden absolute group-hover:block max-w-xl text-center bg-slate-700 rounded-xl font-bold text-sm px-3 py-1 mt-1 shadow-xl">
-                        {{ entry.media.title.english }} - {{ entry.score }}
+                        {{ entry.media.title.english }} - {{ entry.media.format }}
                     </div>
                 </a>
             </div>
@@ -47,9 +47,10 @@ const fetchState = ref(0)
 const panelState = ref(MediaType.ANIME);
 
 const computedTiers = computed(() => {
-    return userStore.tiers
+    const tiers = JSON.parse(JSON.stringify(userStore.tiers));
+    return tiers
         .map((tier: Tier, index: number) => {
-            tier.entries = userStore.sortedTiers[index];
+            tier.entries = userStore.settings.sortedTiers[index];
             return tier;
         })
         .filter((tier: Tier) => tier.entries?.length != 0)
