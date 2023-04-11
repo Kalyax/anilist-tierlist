@@ -28,6 +28,8 @@ export function setupDefaultTiers(userStore: any){
 export function sortMedia(){
     const userStore = useUserStore()
 
+    const mediaIdSet = new Set();
+
     let i = 0;
 
     userStore.settings.sortedTiers = []
@@ -37,14 +39,16 @@ export function sortMedia(){
     }
 
     for(let list of userStore.lists){
-        if(list.isCustomList) continue;
+        //if(list.isCustomList) continue;
         for(let entry of list.entries){
             if(userStore.settings.hiddenFormats.includes(entry.media.format)) continue;
+            if(mediaIdSet.has(entry.media.id)) continue;
             for(let i in userStore.tiers){
                 let tier = userStore.tiers[i]
                 if(tier.to == null || tier.from == null) continue;
                 if((tier.to == tier.from && entry.score == tier.from)||(entry.score < tier.from && entry.score >= tier.to)){
                     userStore.settings.sortedTiers[i].push(entry)
+                    mediaIdSet.add(entry.media.id)
                 }
             }
         }
