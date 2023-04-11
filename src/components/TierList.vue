@@ -14,7 +14,7 @@
 
         <div v-else class="md:flex py-2 md:space-x-2" v-for="tier of computedTiers">
             <div :class="tier.color" 
-                class="w-full mb-3 md:mb-0 py-4 md:py-0 md:w-32 font-bold flex items-center justify-center text-3xl rounded-xl text-slate-900">
+                class="w-full mb-3 md:mb-0 py-4 md:py-0 md:w-32 font-bold flex items-center justify-center text-center text-3xl rounded-xl text-slate-900">
                 {{ tier.name }}
             </div>
             <div class="bg-slate-800 rounded-xl p-3 flex flex-row flex-wrap w-full h-full">
@@ -22,8 +22,12 @@
                     <img
                         class="rounded-xl w-16 sm:w-20 md:w-24 h-full" 
                         :src="entry.media.coverImage.medium" :alt="entry.media.title.english">
-                    <div class="z-50 hidden absolute group-hover:block max-w-xl text-center bg-slate-700 rounded-xl font-bold text-sm px-3 py-1 mt-1 shadow-xl">
-                        {{ entry.media.title.english }} - {{ entry.media.format }}
+                    <div class="z-50 hidden absolute group-hover:flex items-center gap-2 max-w-xl text-center bg-slate-200 text-slate-900 rounded-xl font-bold text-sm px-5 py-5 mt-1 shadow-xl">
+                        <div class="bg-slate-300 px-3 py-1 rounded-xl">
+                            <p class="text-xl">{{ entry.score }}</p>
+                            <p>{{ entry.media.format }}</p>
+                        </div>
+                        <p class="text-lg">{{ entry.media.title.english }}</p>
                     </div>
                 </a>
             </div>
