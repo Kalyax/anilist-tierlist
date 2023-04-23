@@ -28,6 +28,7 @@ export function setupDefaultTiers(userStore: any){
 export function sortMedia(){
     const userStore = useUserStore()
 
+    //to prevent duplication due to custom lists
     const mediaIdSet = new Set();
 
     let i = 0;
@@ -39,18 +40,29 @@ export function sortMedia(){
     }
 
     for(let list of userStore.lists){
-        //if(list.isCustomList) continue;
         for(let entry of list.entries){
+            //check if this kind of media is hidden
             if(userStore.settings.hiddenFormats.includes(entry.media.format)) continue;
             if(mediaIdSet.has(entry.media.id)) continue;
+
             for(let i in userStore.tiers){
                 let tier = userStore.tiers[i]
+
                 if(tier.to == null || tier.from == null) continue;
                 if((tier.to == tier.from && entry.score == tier.from)||(entry.score < tier.from && entry.score >= tier.to)){
-                    userStore.settings.sortedTiers[i].push(entry)
+                    //sorts entries in ascending order by score
+                    const sortedTier = userStore.settings.sortedTiers[i];
+                    let j = 0;
+                    while(j < sortedTier.length && sortedTier[j].score >= entry.score){
+                        j++;
+                    }
+                    userStore.settings.sortedTiers[i] = insert(sortedTier, j as unknown as number, entry)
                     mediaIdSet.add(entry.media.id)
                 }
             }
         }
     }
 }
+
+//insert item in an array at a certain index
+const insert = (arr: Array<any>, index: number, newItem: any) => [...arr.slice(0, index), newItem, ...arr.slice(index)]
