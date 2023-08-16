@@ -25,8 +25,11 @@
             </button>
             <input type="text" :value="getLink" id="link" class="hidden">
         </div>
-        <a target="_blank" class="hover:animate-pulse md:hover:bg-slate-800 rounded-full p-2 transition-all" href="https://github.com/Kalyax/anilist-tierlist">
-            <img class="mx-auto md:mx-0" src="/img/github-mark-white.svg" alt="Github" width="32">
+        <a target="_blank" class="group md:hover:bg-slate-800 rounded-full p-2 transition-all relative" href="https://github.com/Kalyax/anilist-tierlist">
+            <img class="mx-auto md:mx-0 group-hover:animate-pulse" src="/img/github-mark-white.svg" alt="Github" width="32">
+            <span class="opacity-0 group-hover:opacity-100 transition-all absolute right-14 top-2 bg-black/20 px-2 py-1 rounded-md animate-none whitespace-nowrap">
+                Leave a star!
+            </span>
         </a>
     </div>
 </template>
