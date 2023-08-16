@@ -1,6 +1,6 @@
 <template>
-    <div class="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black/50">
-        <div class="bg-slate-800 min-w-1/2 min-h-2/3 rounded-xl px-10 py-8">
+    <div class="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black/50 z-50">
+        <div class="bg-slate-800 min-w-fit min-h-0 w-fit max-h-screen rounded-xl px-10 py-8">
             <div class="flex justify-between  mb-2">
                 <h1 class="font-bold text-2xl">Settings</h1>
                 <button @click="emit('closeSettings')" class="hover:bg-slate-700 rounded-full transition-colors">
@@ -10,7 +10,7 @@
                 </button>
             </div>
 
-            <div class="flex space-x-10">
+            <div class="flex flex-col xl:flex-row gap-x-8 justify-center mx-8 mt-5">
                 <div>
                     <h2 class="text-xl mb-2 text-center font-semibold">Tiers <span class="font-light italic text-sm">From excluded, To included</span></h2>
                     <div class="space-y-2">
@@ -46,9 +46,9 @@
                     <div class="grid grid-cols-2 gap-x-2 gap-y-1.5">
                         <button 
                             v-for="mediaFormat in MediaFormat" 
-                            :class="{ 'bg-sky-600': userStore.settings.hiddenFormats.includes(mediaFormat), 
-                                      'bg-slate-700': !userStore.settings.hiddenFormats.includes(mediaFormat)}" 
-                            class="rounded-xl px-2 py-1 font-semibold" 
+                            :class="{ 'bg-slate-700 text-slate-300': userStore.settings.hiddenFormats.includes(mediaFormat), 
+                                      'bg-slate-800': !userStore.settings.hiddenFormats.includes(mediaFormat)}" 
+                            class="rounded-lg text-slate-400 px-2 py-1 font-semibold transition-colors" 
                             @click="editHiddenFormat(mediaFormat)">
                                 {{ mediaFormat }}
                         </button>

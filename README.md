@@ -6,9 +6,11 @@
 This web-app shows your Anilist scores in a tierlist format. 
 You can either display Animes or Manga.
 
-## WIP
+## Todo
 - Error message pop-up
-- Customizable tiers
+- Filters
+- Improve UI
+- Improve data storage (cookies)
 
 ## Contribute
 Feel free to improve the app and send a pull request!

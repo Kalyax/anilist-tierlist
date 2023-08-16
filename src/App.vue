@@ -1,7 +1,7 @@
 <template>
     <SearchBar @fetchUser="(username: string) => fetchUser(username)" @openSettings="settingsState = false"/>
     <TierList class="mx-10"/>
-    <SettingsPopup :class="{'hidden': settingsState}" @closeSettings="settingsState = true; sortMedia()"/>
+    <SettingsPopup :class="{'opacity-0 pointer-events-none': settingsState}" class="transition-all" @closeSettings="settingsState = true; sortMedia()"/>
 </template>
 
 <script setup lang="ts">
