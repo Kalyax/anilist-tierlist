@@ -1,12 +1,12 @@
 <template>
-    <div class="py-5 px-6 block text-center md:flex md:justify-between md:items-center">
+    <div class="py-5 px-6 mb-4 block text-center md:flex md:justify-between md:items-center bg-slate-800 shadow-sm">
         <a :href="userLink" target="_blank" class="justify-center md:justify-start mb-3 md:mb-0 flex items-center space-x-3" :class="{invisible: userStore.info.avatar?.medium === undefined}">
             <img :src="userStore.info.avatar?.medium" width="48" height="48" class="rounded-full">
             <p class="text-xl font-bold mb-2 md:mb-0 hover:text-slate-300 transition-colors">{{ userStore.info.name }}</p>
         </a>
         <div class="w-full text-center mb-2 md:mb-0 flex items-center justify-center">
             <input v-model="username" type="text" 
-                class="w-2/5 bg-slate-800 hover:bg-slate-800/80 focus:bg-slate-800/50 transition-colors px-4 py-2 rounded-xl outline-none" 
+                class="w-2/5 bg-slate-700 hover:bg-slate-700/80 focus:bg-slate-700/50 transition-colors px-4 py-2 rounded-xl outline-none" 
                 placeholder="Type an username...">
             <button 
                 class="hover:bg-slate-800 focus:bg-green-500 transition-colors duration-300 font-bold rounded-xl ml-3 px-3 py-2" 
