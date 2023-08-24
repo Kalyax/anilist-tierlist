@@ -10,32 +10,32 @@ export const tenScoreFormat: Tier[] = [
     {
         name: "A",
         color: "bg-orange-400",
-        from: 10,
-        to: 9
+        from: 9,
+        to: 10
     },
     {
         name: "B",
         color: "bg-amber-400",
-        from: 9,
-        to: 8
+        from: 8,
+        to: 9
     },
     {
         name: "C",
         color: "bg-yellow-300",
-        from: 8,
-        to: 7
+        from: 7,
+        to: 8
     },
     {
         name: "D",
         color: "bg-lime-400",
-        from: 7,
-        to: 6
+        from: 6,
+        to: 7
     },
     {
         name: "E",
         color: "bg-green-400",
-        from: 6,
-        to: 1
+        from: 1,
+        to: 6
     }
 ]
 
@@ -50,32 +50,32 @@ export const hundredScoreFormat: Tier[] =
     {
         name: "A",
         color: "bg-orange-400",
-        from: 100,
-        to: 90
+        from: 90,
+        to: 100
     },
     {
         name: "B",
         color: "bg-amber-400",
-        from: 90,
-        to: 80
+        from: 80,
+        to: 90
     },
     {
         name: "C",
         color: "bg-yellow-300",
-        from: 80,
-        to: 70
+        from: 70,
+        to: 80
     },
     {
         name: "D",
         color: "bg-lime-400",
-        from: 70,
-        to: 60
+        from: 60,
+        to: 70
     },
     {
         name: "E",
         color: "bg-green-400",
-        from: 60,
-        to: 1
+        from: 1,
+        to: 60
     }
 ]
 

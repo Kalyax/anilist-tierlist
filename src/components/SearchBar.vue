@@ -1,13 +1,29 @@
 <template>
-    <div class="py-5 px-6 mb-4 block text-center md:flex md:justify-between md:items-center bg-slate-800 shadow-sm">
-        <a :href="userLink" target="_blank" class="justify-center md:justify-start mb-3 md:mb-0 flex items-center space-x-3" :class="{invisible: userStore.info.avatar?.medium === undefined}">
-            <img :src="userStore.info.avatar?.medium" width="48" height="48" class="rounded-full">
-            <p class="text-xl font-bold mb-2 md:mb-0 hover:text-slate-300 transition-colors">{{ userStore.info.name }}</p>
+    <div class="py-5 px-6 block text-center md:flex md:justify-between md:items-center shadow-sm">
+        <a :href="userLink" target="_blank" class="justify-center md:justify-start mb-3 md:mb-0 flex items-center space-x-3" :class="{invisible: userStore.anilistUser.avatar?.medium === undefined}">
+            <img :src="userStore.anilistUser.avatar?.medium" width="48" height="48" class="rounded-full">
+            <p class="text-xl font-bold mb-2 md:mb-0 hover:text-slate-300 transition-colors">{{ userStore.anilistUser.name }}</p>
         </a>
+
+
         <div class="w-full text-center mb-2 md:mb-0 flex items-center justify-center">
-            <input v-model="username" type="text" 
-                class="w-2/5 bg-slate-700 hover:bg-slate-700/80 focus:bg-slate-700/50 transition-colors px-4 py-2 rounded-xl outline-none" 
+            <input v-model="searchBar" type="text" 
+                class="w-2/5 bg-slate-800 hover:bg-slate-800/80 focus:bg-slate-800/50 transition-colors px-4 py-2 rounded-xl outline-none" 
                 placeholder="Type an username...">
+
+            <button class="ml-3 px-3 py-2 rounded-l-xl transition-colors" @click="switchMediaType(MediaType.ANIME)"
+                :class="{'activeMTSearchBar': mediaTypeState === MediaType.ANIME, 'unactiveMTSearchBar': mediaTypeState === MediaType.MANGA}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                </svg>
+            </button>
+            <button class="px-3 py-2 rounded-r-xl transition-colors" @click="switchMediaType(MediaType.MANGA)"
+                :class="{'activeMTSearchBar': mediaTypeState === MediaType.MANGA, 'unactiveMTSearchBar': mediaTypeState === MediaType.ANIME}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
+                </svg>
+            </button>
+
             <button 
                 class="hover:bg-slate-800 focus:bg-green-500 transition-colors duration-300 font-bold rounded-xl ml-3 px-3 py-2" 
                 @click="copyLink">
@@ -15,6 +31,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
                 </svg>
             </button>
+            <input type="text" :value="getLink" id="link" class="hidden">
+
             <button 
                 class="hover:bg-slate-800 transition-colors duration-300 font-bold rounded-xl ml-3 px-3 py-2" 
                 @click="$emit('openSettings')">
@@ -23,8 +41,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
             </button>
-            <input type="text" :value="getLink" id="link" class="hidden">
         </div>
+
+
         <a target="_blank" class="group md:hover:bg-slate-800 rounded-full p-2 transition-all relative" href="https://github.com/Kalyax/anilist-tierlist">
             <img class="mx-auto md:mx-0 group-hover:animate-pulse" src="/img/github-mark-white.svg" alt="Github" width="32">
             <span class="opacity-0 group-hover:opacity-100 transition-all absolute right-14 top-2 bg-black/20 px-2 py-1 rounded-md animate-none whitespace-nowrap">
@@ -36,34 +55,45 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import { useUserStore } from './../stores/userStore';
+import { useUserStore }         from '@/stores/userStore';
+import { MediaType }            from '@/types';
+import { tiersToString }        from '@/tiers/tiersString'
 
 const userStore = useUserStore()
 
-const emit = defineEmits(["fetchUser", "openSettings"])
-const username = ref()
+const emit = defineEmits(["fetchUser", "openSettings", "mediaTypeState"])
 
-const userLink = computed(() => {
-    return "https://anilist.co/user/" + userStore.info.name
-})
+const mediaTypeState = ref(MediaType.ANIME);
+function switchMediaType(from: number){
+    if((mediaTypeState.value == MediaType.ANIME && from == MediaType.ANIME) || (mediaTypeState.value == MediaType.MANGA && from == MediaType.MANGA)) 
+        return;
+    
+    mediaTypeState.value = from
+    emit("mediaTypeState", mediaTypeState.value)
+}
 
-/** Watches the username input */
-watch(username, (val) => {
+/** Watches the search bar input and emits it to the App component */
+const searchBar = ref()
+watch(searchBar, (val) => {
     setTimeout(async () => {
-        if(username.value === val) {    
-            emit("fetchUser", username.value);
+        if(searchBar.value === val) {    
+            emit("fetchUser", searchBar.value);
         }
     }, 500)
 })
 
+const userLink = computed(() => {
+    return "https://anilist.co/user/" + userStore.anilistUser.name
+})
+
 /** Copy button functions */
 const getLink = computed(() => {
-    if(userStore.info.id == undefined) return null;
+    if(userStore.anilistUser.id == undefined) return null;
 
     const url = new URL(window.location.href);
     const searchParams = url.searchParams;
-    searchParams.set('id', <string><unknown>userStore.info.id)
-    searchParams.set('tiers', encodeURI(JSON.stringify(userStore.tiers)))
+    searchParams.set('id', <string><unknown>userStore.anilistUser.id)
+    searchParams.set('tiers', encodeURI(tiersToString(userStore.tiersStructure)))
     url.search = searchParams.toString();
     return url.toString();
 })

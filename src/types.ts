@@ -1,20 +1,16 @@
-export interface User {
+//Anilist related interfaces
+export interface AnilistUser {
     id: number,
     name: string,
     avatar: {
         medium: string
     },
+    options: {
+        titleLanguage: UserTitleLanguage
+    }
     mediaListOptions: {
         scoreFormat: ScoreFormat
     }
-}
-
-export interface Tier {
-    name: String,
-    color: String,
-    from: number | null,
-    to: number | null,
-    entries?: Array<Entry>
 }
 
 export interface List {
@@ -37,11 +33,6 @@ export interface Media {
     coverImage: {
         medium: string
     }
-}
-
-export interface Settings {
-    sortedTiers: Array<Array<Entry>>,
-    hiddenFormats: Array<MediaFormat>
 }
 
 export enum MediaType{
@@ -68,4 +59,23 @@ export enum MediaFormat {
     MANGA = "MANGA",
     NOVEL = "NOVEL",
     ONE_SHOT = "ONE_SHOT"
+}
+
+export enum UserTitleLanguage {
+    ROMAJI = "ROMAJI",
+    ENGLISH = "ENGLISH",
+    NATIVE = "NATIVE",
+    ROMAJI_STYLISED = "ROMAJI_STYLISED",
+    ENGLISH_STYLISED = "ENGLISH_STYLISED",
+    NATIVE_STYLISED = "NATIVE_STYLISED"
+}
+
+
+//Tierlist related interfaces
+
+export interface Tier {
+    name: String,
+    color: String,
+    from: number | null,
+    to: number | null
 }

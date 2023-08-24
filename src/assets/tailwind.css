@@ -6,9 +6,9 @@ body{
     @apply bg-slate-900 text-slate-200;
 }
 
-.buttonActive{
-    @apply bg-slate-200 hover:bg-slate-300 text-slate-900
+.activeMTSearchBar{
+    @apply bg-slate-700/70
 }
-.buttonNotActive{
-    @apply hover:bg-slate-800 text-slate-200
+.unactiveMTSearchBar{
+    @apply bg-slate-700/40 hover:bg-slate-700
 }
