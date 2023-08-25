@@ -8,8 +8,6 @@ Display your Anilist scores in a tierlist format. Tiers are customizable and you
 ## Todo
 - Add an error message when you can't find a user
 - Add filters
-- Improve UI
-- Add reload-persistent settings
 
 ## Contribute
 Feel free to improve the app and send a pull request!
