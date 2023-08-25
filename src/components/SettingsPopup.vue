@@ -3,7 +3,7 @@
         <div class="bg-slate-800 min-w-fit min-h-0 w-fit max-h-screen rounded-xl px-10 py-8">
             <div class="flex justify-between  mb-2">
                 <h1 class="font-bold text-2xl">Settings</h1>
-                <button @click="emit('closeSettings')" class="hover:bg-slate-700 rounded-xl transition-colors px-2">
+                <button @click="stateStore.settingsState = true" class="hover:bg-slate-700 rounded-xl transition-colors px-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -60,12 +60,12 @@
 </template>
 
 <script setup lang="ts">
+import { useStateStore } from '@/stores/stateStore';
 import { useUserStore } from './../stores/userStore';
 import { MediaFormat, type Tier } from './../types';
 
+const stateStore = useStateStore();
 const userStore = useUserStore();
-
-const emit = defineEmits(["closeSettings"]);
 
 const editHiddenFormat = (format: MediaFormat) => {
     let hiddenFormats = userStore.hiddenFormats

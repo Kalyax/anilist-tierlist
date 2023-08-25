@@ -1,32 +1,26 @@
 <template>
-    <SearchBar 
-        @fetchUser="(username: string) => fetchUser(username)" 
-        @openSettings="settingsState = false" 
-        @mediaTypeState="(mts: MediaType) => mediaTypeState = mts"
-    />
-    <TierList class="mx-10" :mediaTypeState="mediaTypeState" :settingsState="settingsState"/>
-    <SettingsPopup :class="{'opacity-0 pointer-events-none': settingsState}" class="transition-all"
-        @closeSettings="settingsState = true"/>
+    <SearchBar @fetchUser="(username: string) => fetchUser(username)" />
+    <TierList class="mx-10" />
+    <SettingsPopup :class="{'opacity-0 pointer-events-none': stateStore.settingsState}" class="transition-all" />
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 
 import TierList      from './components/tierlist/TierList.vue';
 import SearchBar     from './components/SearchBar.vue';
 import SettingsPopup from './components/SettingsPopup.vue';
 
 import { useUserStore }                      from './stores/userStore';
+import { useStateStore }                     from './stores/stateStore';
 import { userQuery, userIdQuery }            from './graphql/queries';
 import { anilist }                           from './graphql/anilist';
 import { toEntryList, setupDefaultTiers }    from './tiers/entrySort';
-import { stringToTiers }                 from './tiers/tiersString';
-import { MediaType, type AnilistUser }       from './types'
+import { stringToTiers }                     from './tiers/tiersString';
+import { type AnilistUser }                  from './types'
 
 const userStore = useUserStore();
-
-const settingsState = ref(true);
-const mediaTypeState = ref(MediaType.ANIME);
+const stateStore = useStateStore();
 
 const urlParams = new URLSearchParams(window.location.search);
 

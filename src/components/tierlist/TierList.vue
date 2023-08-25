@@ -16,27 +16,15 @@ import { ref, watch }    from 'vue';
 import { useUserStore }  from '@/stores/userStore';
 import { MediaType }     from '@/types';
 import SingleTier        from './../tierlist/SingleTier.vue';
+import { useStateStore } from '@/stores/stateStore';
 
 const userStore  = useUserStore()
+const stateStore = useStateStore();
 
 const fetchState = ref(0)
 
-//detects when the props mediaTypeState changes to update view
-const props          = defineProps(["mediaTypeState", "settingsState"]);
-const mediaTypeState = ref(props.mediaTypeState);
-watch(() => props.mediaTypeState, () => { switchMediaType(props.mediaTypeState) })
-
-/**
- * Switch from anime panel to manga panel
- * @param from 
- */
-function switchMediaType(from: number){
-    if((mediaTypeState.value == MediaType.ANIME && from == MediaType.ANIME) || (mediaTypeState.value == MediaType.MANGA && from == MediaType.MANGA)) 
-        return;
-    
-    mediaTypeState.value = from
-    updateView(mediaTypeState.value)
-}
+//detects when the state mediaTypeState changes to update view
+watch(() => stateStore.mediaTypeState, (newVal, oldVal) => { updateView(newVal) })
 
 //updating the content of the tierlist
 const structuredEntries = ref()
@@ -49,10 +37,10 @@ function updateView(mediaType: MediaType){
 
 //Watches for id update
 watch(() => userStore.anilistUser.id, (newVal) => {
-    if(newVal) updateView(mediaTypeState.value) //fetchMedia(newVal)
+    if(newVal) updateView(stateStore.mediaTypeState)
 })
 
-watch(() => props.settingsState, (newVal) => {
-    if(newVal) updateView(mediaTypeState.value)
+watch(() => stateStore.settingsState, (newVal) => {
+    if(newVal) updateView(stateStore.mediaTypeState)
 })
 </script>
