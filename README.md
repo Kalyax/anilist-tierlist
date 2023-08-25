@@ -3,14 +3,13 @@
 ![Preview](https://github.com/Kalyax/anilist-tierlist/blob/master/public/img/Preview.png)
 
 ## About
-This web-app shows your Anilist scores in a tierlist format. 
-You can either display Animes or Manga.
+Display your Anilist scores in a tierlist format. Tiers are customizable and you can either display Animes or Manga.
 
 ## Todo
-- Error message pop-up
-- Filters
+- Add an error message when you can't find a user
+- Add filters
 - Improve UI
-- Improve data storage (cookies)
+- Add reload-persistent settings
 
 ## Contribute
 Feel free to improve the app and send a pull request!

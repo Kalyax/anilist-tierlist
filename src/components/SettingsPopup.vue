@@ -10,6 +10,37 @@
                 </button>
             </div>
 
+            <div v-if="userStore.anilistUser.id">
+                <h2 class="text-xl mb-2 text-center font-semibold">Share my tierlist</h2>
+
+                <div class="mx-auto w-fit">
+                    <button 
+                        class="hover:bg-slate-700 focus:bg-green-500 transition-colors duration-300 font-bold rounded-xl ml-3 px-3 py-1.5 text-sm" 
+                        @click="copyLink('link_wo')">
+                        Share Without Tiers
+                    </button>
+                    <input type="text" :value="getLink('link_wo')" id="link_wo" class="hidden">
+
+                    <button 
+                        class="hover:bg-slate-700 focus:bg-green-500 transition-colors duration-300 font-bold rounded-xl ml-3 px-3 py-1.5 text-sm" 
+                        @click="copyLink('link_w')">
+                        Share With Tiers
+                    </button>
+                    <input type="text" :value="getLink('link_w')" id="link_w" class="hidden">
+
+                    <button 
+                        class="hover:bg-slate-700 focus:bg-green-500 transition-colors duration-300 font-bold rounded-xl ml-3 px-3 py-1.5 text-sm" 
+                        @click="copyLink('tier_conf')">
+                        Copy Tiers Configuration
+                    </button>
+                    <input type="text" :value="tiersString" id="tier_conf" class="hidden">
+                </div>
+
+                <div class="text-center">
+                    <p class="w-2/3 mx-auto mb-2 text-sm italic">Copy and paste tiers configuration into your Anilist description to load your tiers preferences automatically</p>
+                </div>
+            </div>
+
             <div class="flex flex-col xl:flex-row gap-x-8 justify-center mx-8 mt-5">
                 <div>
                     <h2 class="text-xl mb-2 text-center font-semibold">Tiers <span class="font-light italic text-sm">From included, To excluded</span></h2>
@@ -63,6 +94,8 @@
 import { useStateStore } from '@/stores/stateStore';
 import { useUserStore } from './../stores/userStore';
 import { MediaFormat, type Tier } from './../types';
+import { tiersToString }        from '@/tiers/tiersString'
+import { computed } from 'vue';
 
 const stateStore = useStateStore();
 const userStore = useUserStore();
@@ -103,4 +136,29 @@ function addTier(){
 function removeTier(i: number){
     userStore.tiersStructure.splice(i, 1);
 }
+
+const tiersString = computed(() => "<atl>" + encodeURI(tiersToString(userStore.tiersStructure)) + "</atl>")
+
+const getLink = (el: string) => {
+    if(userStore.anilistUser.id == undefined) return null;
+
+    const url = new URL(window.location.href);
+    const searchParams = url.searchParams;
+
+    searchParams.set('id', <string><unknown>userStore.anilistUser.id)
+    if(el == "link_w") searchParams.set('tiers', encodeURI(tiersToString(userStore.tiersStructure)))
+
+    url.search = searchParams.toString();
+    return url.toString();
+}
+
+function copyLink(el: string) {
+    const copyText = document.getElementById(el) as HTMLInputElement;
+
+    if(copyText == null) return;
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(copyText.value);
+    return false;
+} 
 </script>

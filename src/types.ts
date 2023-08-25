@@ -2,6 +2,7 @@
 export interface AnilistUser {
     id: number,
     name: string,
+    about: string,
     avatar: {
         medium: string
     },

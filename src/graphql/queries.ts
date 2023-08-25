@@ -1,31 +1,9 @@
-const animeCollectionsQuery = `#graphql
-    query ($id: Int, $type: MediaType) {
-      MediaListCollection(userId: $id, type: $type){
-        lists {
-          isCustomList
-          entries{
-            score
-            media{
-              id
-              siteUrl
-              format
-              title{
-                english
-              }
-              coverImage {
-                medium
-              }
-            }
-          }
-        }
-      }
-}`
-
 const userQuery = `#graphql
 query ($name: String){
     User(name: $name){
         id
         name
+        about(asHtml: false)
         avatar{
           medium
         }
@@ -83,6 +61,7 @@ query ($id: Int){
     User(id: $id){
         id
         name
+        about(asHtml: false)
         avatar{
           medium
         }
@@ -135,4 +114,4 @@ query ($id: Int){
     }
 }`
 
-export { animeCollectionsQuery, userQuery, userIdQuery }
+export { userQuery, userIdQuery }
