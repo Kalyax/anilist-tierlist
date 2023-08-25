@@ -20,7 +20,10 @@ export const toEntryList = (lists: Array<List>): Array<Entry> => {
     for(let list of lists){
         for(let entry of list.entries){
             if(mediaIdSet.has(entry.media.id)) continue;
-            else entryList.push(entry)
+            else {
+                mediaIdSet.add(entry.media.id)
+                entryList.push(entry)
+            }
         }
     }
 
