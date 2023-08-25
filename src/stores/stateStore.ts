@@ -6,6 +6,7 @@ import { ref } from 'vue';
 export const useStateStore = defineStore("state", () => {
     const settingsState = ref(true);
     const mediaTypeState = ref(MediaType.ANIME);
+    const viewFetchState = ref(0);
 
-    return { settingsState, mediaTypeState }
+    return { settingsState, mediaTypeState, viewFetchState }
 })

@@ -28,8 +28,11 @@ const urlParams = new URLSearchParams(window.location.search);
 onMounted(async () => {
     const id = Number(urlParams.get("id"))
     const tiers = urlParams.get("tiers");
-    if(id && id != 0) fetchUser(id);
     if(tiers) userStore.tiersStructure = stringToTiers(decodeURI(tiers))
+    if(id && id != 0) {
+        stateStore.viewFetchState = 1
+        fetchUser(id);
+    }
 })
 
 /**
@@ -37,6 +40,8 @@ onMounted(async () => {
  * @param userIdentifier 
  */
 async function fetchUser(userIdentifier: string | number) {
+    stateStore.viewFetchState = 1
+
     const isName = typeof userIdentifier == "string";
     const variables = isName ? {name: userIdentifier} : {id: userIdentifier};
     const query = isName ? userQuery : userIdQuery;

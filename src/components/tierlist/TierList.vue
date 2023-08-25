@@ -1,9 +1,9 @@
 <template>
-    <section v-if="fetchState == 0">
+    <section v-if="stateStore.viewFetchState == 0">
         <p class="text-slate-700 text-2xl text-center mt-10">Type an username to show a tierlist</p>
     </section>
     <section v-else>
-        <div v-if="fetchState == 1" class="absolute right-1/2 bottom-1/2 translate-x-1/2">
+        <div v-if="stateStore.viewFetchState == 1" class="absolute right-1/2 bottom-1/2 translate-x-1/2">
             <div class="border-t-transparent border-solid animate-spin rounded-full border-slate-700 border-4 h-32 w-32"></div>
         </div>
 
@@ -21,8 +21,6 @@ import { useStateStore } from '@/stores/stateStore';
 const userStore  = useUserStore()
 const stateStore = useStateStore();
 
-const fetchState = ref(0)
-
 //detects when the state mediaTypeState changes to update view
 watch(() => stateStore.mediaTypeState, (newVal, oldVal) => { updateView(newVal) })
 
@@ -30,9 +28,8 @@ watch(() => stateStore.mediaTypeState, (newVal, oldVal) => { updateView(newVal) 
 const structuredEntries = ref()
 function updateView(mediaType: MediaType){
     const entryList = mediaType == MediaType.ANIME ? userStore.animeList : userStore.mangaList
-    fetchState.value = 1
     structuredEntries.value = userStore.structureEntries(entryList, userStore.tiersStructure, userStore.hiddenFormats)
-    fetchState.value = 2
+    stateStore.viewFetchState = 2
 }
 
 //Watches for id update

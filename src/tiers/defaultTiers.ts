@@ -21,7 +21,7 @@ export const tenScoreFormat: Tier[] = [
     },
     {
         name: "C",
-        color: "bg-yellow-300",
+        color: "bg-yellow-400",
         from: 7,
         to: 8
     },
@@ -61,7 +61,7 @@ export const hundredScoreFormat: Tier[] =
     },
     {
         name: "C",
-        color: "bg-yellow-300",
+        color: "bg-yellow-400",
         from: 70,
         to: 80
     },
@@ -101,7 +101,7 @@ export const fiveScoreFormat: Tier[] =
     },
     {
         name: "C",
-        color: "bg-yellow-300",
+        color: "bg-yellow-400",
         from: 2,
         to: 2
     },

@@ -4,7 +4,7 @@ import { Tier } from "@/types";
 export const tiersToString = (tiersStructure: Array<Tier>): string => {
     let tiersString = [];
     for(let tier of tiersStructure){
-        tiersString.push(tier.name, ";", tier.color, ";", tier.from, ";", tier.to, ";");
+        tiersString.push(tier.name, ";", tier.color.substring(3, tier.color.length - 4), ";", tier.from, ";", tier.to, ";");
     }
     tiersString.pop();
     return tiersString.join("");
@@ -18,7 +18,7 @@ export const stringToTiers = (tiersString: string) => {
     while(tiersArray.length != 0){
         let tier = {
             name: tiersArray.shift(),
-            color: tiersArray.shift(),
+            color: "bg-" + tiersArray.shift() + "-400",
             from: tiersArray.shift() as unknown as number,
             to: tiersArray.shift() as unknown as number
         } as unknown as Tier;

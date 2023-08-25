@@ -12,7 +12,7 @@
 
             <div class="flex flex-col xl:flex-row gap-x-8 justify-center mx-8 mt-5">
                 <div>
-                    <h2 class="text-xl mb-2 text-center font-semibold">Tiers <span class="font-light italic text-sm">From excluded, To included</span></h2>
+                    <h2 class="text-xl mb-2 text-center font-semibold">Tiers <span class="font-light italic text-sm">From included, To excluded</span></h2>
                     <div class="space-y-2">
                         <div v-for="tier, i in userStore.tiersStructure" class="flex items-center space-x-2">
                             <p :class="tier.color" class="text-slate-900 font-bold text-xl w-10 text-center py-2 rounded-xl group">
@@ -78,7 +78,7 @@ const colors = [
     "bg-red-400", 
     "bg-orange-400", 
     "bg-amber-400", 
-    "bg-yellow-300", 
+    "bg-yellow-400", 
     "bg-lime-400", 
     "bg-green-400", 
     "bg-emerald-400",
