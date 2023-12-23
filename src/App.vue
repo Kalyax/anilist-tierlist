@@ -56,7 +56,7 @@ async function fetchUser(userIdentifier: string | number) {
             const atlTierString = (response.data.User.about as string).match(new RegExp("(?<=<atl>)(.*?)(?=<\/atl>)"))
             if(!urlParams.get("tiers") && atlTierString && atlTierString.length != 0) userStore.tiersStructure = stringToTiers(atlTierString[0])
         }
-        else if(!urlParams.get("tiers")) userStore.tiersStructure = setupDefaultTiers(userStore.anilistUser.mediaListOptions.scoreFormat);
+        if(!urlParams.get("tiers")) userStore.tiersStructure = setupDefaultTiers(userStore.anilistUser.mediaListOptions.scoreFormat);
     }
     else console.error("No user found with this name");
 }

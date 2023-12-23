@@ -34,7 +34,7 @@ export const tenScoreFormat: Tier[] = [
     {
         name: "E",
         color: "bg-green-400",
-        from: 1,
+        from: 0.1,
         to: 6
     }
 ]

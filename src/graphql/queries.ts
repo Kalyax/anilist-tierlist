@@ -26,6 +26,8 @@ query ($name: String){
             format
             title{
               english
+              romaji
+              native
             }
             coverImage {
               medium
@@ -46,6 +48,8 @@ query ($name: String){
             format
             title{
               english
+              romaji
+              native
             }
             coverImage {
               medium
@@ -84,6 +88,8 @@ query ($id: Int){
             format
             title{
               english
+              romaji
+              native
             }
             coverImage {
               medium
@@ -104,6 +110,8 @@ query ($id: Int){
             format
             title{
               english
+              romaji
+              native
             }
             coverImage {
               medium

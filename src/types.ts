@@ -29,7 +29,9 @@ export interface Media {
     siteUrl: string,
     format: MediaFormat,
     title: {
-        english: string
+        english: string,
+        romaji: string,
+        native: string
     }
     coverImage: {
         medium: string
