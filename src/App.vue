@@ -52,11 +52,15 @@ async function fetchUser(userIdentifier: string | number) {
         userStore.animeList = toEntryList(response.data.animeList.lists);
         userStore.mangaList = toEntryList(response.data.mangaList.lists);
 
-        if(response.data.User.about){
-            const atlTierString = (response.data.User.about as string).match(new RegExp("(?<=<atl>)(.*?)(?=<\/atl>)"))
-            if(!urlParams.get("tiers") && atlTierString && atlTierString.length != 0) userStore.tiersStructure = stringToTiers(atlTierString[0])
+        if(!urlParams.get("tiers")){
+            let atlTierString: RegExpMatchArray;
+            if(response.data.User.about) 
+                atlTierString = (response.data.User.about as string).match(new RegExp("(?<=<atl>)(.*?)(?=<\/atl>)"));
+            if(atlTierString && atlTierString.length != 0)
+                userStore.tiersStructure = stringToTiers(atlTierString[0]);
+            else
+                userStore.tiersStructure = setupDefaultTiers(userStore.anilistUser.mediaListOptions.scoreFormat);
         }
-        if(!urlParams.get("tiers")) userStore.tiersStructure = setupDefaultTiers(userStore.anilistUser.mediaListOptions.scoreFormat);
     }
     else console.error("No user found with this name");
 }
