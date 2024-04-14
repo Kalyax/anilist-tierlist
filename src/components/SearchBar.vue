@@ -9,7 +9,7 @@
         <div class="w-full text-center mb-2 md:mb-0 flex items-center justify-center">
             <input v-model="searchBar" type="text" 
                 class="w-2/5 bg-slate-800 hover:bg-slate-800/80 focus:bg-slate-800/50 transition-colors px-4 py-2 rounded-xl outline-none" 
-                placeholder="Type an username...">
+                placeholder="Type a username...">
 
             <button class="ml-3 px-3 py-2 rounded-l-xl transition-colors" @click="switchMediaType(MediaType.ANIME)"
                 :class="{'activeMTSearchBar': stateStore.mediaTypeState === MediaType.ANIME, 'unactiveMTSearchBar': stateStore.mediaTypeState === MediaType.MANGA}">

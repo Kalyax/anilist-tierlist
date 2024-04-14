@@ -1,6 +1,6 @@
 <template>
     <section v-if="stateStore.viewFetchState == 0">
-        <p class="text-slate-700 text-2xl text-center mt-10">Type an username to show a tierlist</p>
+        <p class="text-slate-700 text-2xl text-center mt-10">Type a username to show a tierlist</p>
     </section>
     <section v-else>
         <div v-if="stateStore.viewFetchState == 1" class="absolute right-1/2 bottom-1/2 translate-x-1/2">
