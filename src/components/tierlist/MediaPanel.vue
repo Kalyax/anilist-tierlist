@@ -27,7 +27,7 @@
             <h1 class="text-xs mx-1 font-bold">{{ getMediaName(entry) }}</h1>
             <p class="mx-1">{{ mediaFormatString(entry.media.format) }}</p>
         </div>
-        <img :src="entry.media.coverImage.medium" :alt="getMediaName(entry)" class="rounded-md w-16 sm:w-20 md:w-28 h-full">
+        <img :src="entry.media.coverImage.medium" :alt="getMediaName(entry)" class="rounded-md w-16 sm:w-20 md:w-24 h-full">
     </div>
     
 
@@ -35,9 +35,10 @@
 
 <script setup lang="ts">
 import { mediaFormatString } from './../../util';
+import { Entry } from "@/types"
 
 const props = defineProps(["entry"])
-const getMediaName = (entry) => {
+const getMediaName = (entry: Entry) => {
     if(entry.media.title.english) return entry.media.title.english
     else if(entry.media.title.romaji) return entry.media.title.romaji
     else return entry.media.title.native

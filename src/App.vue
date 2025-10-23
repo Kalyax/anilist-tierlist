@@ -11,7 +11,7 @@ import { onMounted } from 'vue';
 import TierList      from './components/tierlist/TierList.vue';
 import SearchBar     from './components/SearchBar.vue';
 import SettingsPopup from './components/SettingsPopup.vue';
-import ErrorPopup from './components/ErrorPopup.vue';
+import ErrorPopup    from './components/ErrorPopup.vue';
 
 import { useUserStore }                      from './stores/userStore';
 import { useStateStore }                     from './stores/stateStore';
@@ -43,7 +43,7 @@ onMounted(async () => {
         fetchUser(id);
     }
     if(access_token.length > 1){
-        viewerStore.token = access_token[1].split("&")[0].split("=")[1];
+        viewerStore.token = access_token[1]?.split("&")[0]?.split("=")[1];
         const response = await anilistAuth(viewerQuery, viewerStore.token, {})
         viewerStore.viewer = response.data.Viewer;
     }
@@ -67,10 +67,10 @@ async function fetchUser(userIdentifier: string | number) {
         userStore.mangaList = toEntryList(response.data.mangaList.lists);
 
         if(!urlParams.get("tiers")){
-            let atlTierString: RegExpMatchArray;
+            let atlTierString: RegExpMatchArray | null = null;
             if(response.data.User.about) 
                 atlTierString = (response.data.User.about as string).match(new RegExp("(?<=<atl>)(.*?)(?=<\/atl>)"));
-            if(atlTierString && atlTierString.length != 0)
+            if(atlTierString != null && atlTierString.length != 0)
                 userStore.tiersStructure = stringToTiers(atlTierString[0]);
             else
                 userStore.tiersStructure = setupDefaultTiers(userStore.anilistUser.mediaListOptions.scoreFormat);
