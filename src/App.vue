@@ -13,14 +13,16 @@ import SettingsPopup from './components/SettingsPopup.vue';
 
 import { useUserStore }                      from './stores/userStore';
 import { useStateStore }                     from './stores/stateStore';
-import { userQuery, userIdQuery }            from './graphql/queries';
-import { anilist }                           from './graphql/anilist';
+import { useViewerStore }                    from './stores/viewerStore';
+import { userQuery, userIdQuery, viewerQuery }            from './graphql/queries';
+import { anilist, anilistAuth }                           from './graphql/anilist';
 import { toEntryList, setupDefaultTiers }    from './tiers/entrySort';
 import { stringToTiers }                     from './tiers/tiersString';
 import { type AnilistUser }                  from './types'
 
 const userStore = useUserStore();
 const stateStore = useStateStore();
+const viewerStore = useViewerStore();
 
 const urlParams = new URLSearchParams(window.location.search);
 
@@ -28,10 +30,16 @@ const urlParams = new URLSearchParams(window.location.search);
 onMounted(async () => {
     const id = Number(urlParams.get("id"))
     const tiers = urlParams.get("tiers");
+    const access_token = document.URL.split("#");
     if(tiers) userStore.tiersStructure = stringToTiers(decodeURI(tiers))
     if(id && id != 0) {
         stateStore.viewFetchState = 1
         fetchUser(id);
+    }
+    if(access_token.length > 1){
+        viewerStore.token = access_token[1].split("&")[0].split("=")[1];
+        const response = await anilistAuth(viewerQuery, viewerStore.token, {})
+        viewerStore.viewer = response.data.Viewer;
     }
 })
 

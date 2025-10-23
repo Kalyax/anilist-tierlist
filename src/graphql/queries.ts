@@ -122,4 +122,16 @@ query ($id: Int){
     }
 }`
 
-export { userQuery, userIdQuery }
+const viewerQuery =
+`#graphql
+{
+  Viewer {
+    name
+    avatar{
+      medium
+    }
+  }
+}
+`
+
+export { userQuery, userIdQuery, viewerQuery }

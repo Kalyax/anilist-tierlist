@@ -1,10 +1,10 @@
 <template>
     <section v-if="stateStore.viewFetchState == 0">
-        <p class="text-slate-700 text-2xl text-center mt-10">Type a username to show a tierlist</p>
+        <p class="text-zinc-700 text-2xl text-center mt-10">Search a user to show a tierlist</p>
     </section>
     <section v-else>
         <div v-if="stateStore.viewFetchState == 1" class="absolute right-1/2 bottom-1/2 translate-x-1/2">
-            <div class="border-t-transparent border-solid animate-spin rounded-full border-slate-700 border-4 h-32 w-32"></div>
+            <div class="border-t-transparent border-solid animate-spin rounded-full border-zinc-700 border-4 h-32 w-32"></div>
         </div>
 
         <SingleTier v-else v-for="(tier, index) in structuredEntries" :tier="tier" :index="index"/>

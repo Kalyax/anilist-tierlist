@@ -14,6 +14,13 @@ export interface AnilistUser {
     }
 }
 
+export interface ViewerUser {
+    name: string,
+    avatar: {
+        medium: string
+    }
+}
+
 export interface List {
     isCustomList: boolean,
     entries: Array<Entry>

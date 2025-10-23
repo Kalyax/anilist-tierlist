@@ -12,3 +12,17 @@ export const anilist = (query: string, variables?: Object): Promise<any> => {
         })
     })
 }
+
+export const anilistAuth = (query: string, accessToken:string, variables?: Object): Promise<any> => {
+    return json('https://graphql.anilist.co', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            query, variables
+        })
+    })
+}
