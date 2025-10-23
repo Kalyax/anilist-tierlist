@@ -56,7 +56,7 @@
                                 backdrop-contrast-100 gradientSettings">
                                     <input type="text" v-model="userStore.tiersStructure[i]?.name" class="mb-3 bg-zinc-800/50 hover:bg-zinc-800/60 focus:bg-zinc-800/70 transition-colors px-4 py-1.5 rounded-xl outline-none">
                                     <div class="grid grid-cols-7 gap-3">
-                                        <button v-for="color in colors" @click="userStore.tiersStructure[i].color = color">
+                                        <button v-for="color in colors" @click="userStore.tiersStructure[i]!.color = color">
                                             <div class="h-6 w-6 rounded-full" :class="color"></div>
                                         </button>
                                     </div>
@@ -168,7 +168,7 @@ function copyLink(el: string) {
     return false;
 } 
 
-function closeSettingsClickOutside(e){
+function closeSettingsClickOutside(e: any){
     if(e.target == document.getElementById('testf')){
         stateStore.settingsState = true
     }
