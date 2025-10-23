@@ -2,6 +2,7 @@
     <SearchBar @fetchUser="(username: string) => fetchUser(username)" />
     <TierList class="mx-10" />
     <SettingsPopup :class="{'opacity-0 pointer-events-none': stateStore.settingsState}" class="transition-all" />
+    <ErrorPopup :msg="msgError" :class="{'opacity-0': !showError, 'opacity-100': showError}"/>
 </template>
 
 <script setup lang="ts">
@@ -10,6 +11,7 @@ import { onMounted } from 'vue';
 import TierList      from './components/tierlist/TierList.vue';
 import SearchBar     from './components/SearchBar.vue';
 import SettingsPopup from './components/SettingsPopup.vue';
+import ErrorPopup from './components/ErrorPopup.vue';
 
 import { useUserStore }                      from './stores/userStore';
 import { useStateStore }                     from './stores/stateStore';
@@ -19,12 +21,16 @@ import { anilist, anilistAuth }                           from './graphql/anilis
 import { toEntryList, setupDefaultTiers }    from './tiers/entrySort';
 import { stringToTiers }                     from './tiers/tiersString';
 import { type AnilistUser }                  from './types'
+import { ref }                               from 'vue';
 
 const userStore = useUserStore();
 const stateStore = useStateStore();
 const viewerStore = useViewerStore();
 
 const urlParams = new URLSearchParams(window.location.search);
+
+const msgError = ref("");
+const showError = ref(false);
 
 /**if there is an id param when mounted, fetch the user */
 onMounted(async () => {
@@ -70,6 +76,12 @@ async function fetchUser(userIdentifier: string | number) {
                 userStore.tiersStructure = setupDefaultTiers(userStore.anilistUser.mediaListOptions.scoreFormat);
         }
     }
-    else console.error("No user found with this name");
+    else {
+        msgError.value = "No user found with this name/id";
+        showError.value = true;
+        setTimeout(function (){
+            showError.value = false;
+        }, 5000);
+    }
 }
 </script>

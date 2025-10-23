@@ -14,7 +14,7 @@ body{
 .gradientSettings{
     background-image: radial-gradient(
         circle at 50% 250%,
-        hsl(259, 13%, 28%),
+        hsl(240, 13%, 28%),
         transparent
     );
 }
@@ -22,7 +22,7 @@ body{
 hover_gradientSettings:hover{
     background-image: radial-gradient(
         circle at 50% 250%,
-        hsl(259, 13%, 28%),
+        hsl(240, 13%, 28%),
         transparent
     );
 }
