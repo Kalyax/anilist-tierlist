@@ -8,6 +8,7 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    //"verbatimModuleSyntax": false
+    "verbatimModuleSyntax": false,
+    "noUncheckedIndexedAccess": false
   }
 }

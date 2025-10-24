@@ -1,7 +1,7 @@
 import { tenScoreFormat, hundredScoreFormat, fiveScoreFormat, threeScoreFormat } from "./defaultTiers";
 import { Entry, List, MediaFormat, ScoreFormat, Tier } from "../types";
 
-export const setupDefaultTiers = (scoreFormat: ScoreFormat): Array<Tier> => {
+export const setupDefaultTiers = (scoreFormat: ScoreFormat): Array<Tier> | undefined => {
     if(scoreFormat == ScoreFormat.POINT_10 || scoreFormat == ScoreFormat.POINT_10_DECIMAL)
         return tenScoreFormat;
     else if(scoreFormat == ScoreFormat.POINT_100)
@@ -44,7 +44,7 @@ export const structureEntries = (entryList: Array<Entry>, tiersStructure: Array<
 
         //FROM 1 TO 10 // ASCENDING // FROM INCLUDED
         for(let tierIndex in tiersStructure){
-            let tier = tiersStructure[tierIndex];
+            let tier: Tier = tiersStructure[tierIndex];
 
             if(tier.to === null || tier.from === null) continue;
             if((tier.from == tier.to && tier.from == entry.score)||(entry.score >= tier.from && entry.score < tier.to)){
