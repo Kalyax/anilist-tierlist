@@ -4,10 +4,8 @@
 
 ## About
 Display your Anilist scores in a tierlist format. Tiers are customizable and you can either display Animes or Manga.
-
-## Todo
-- Add an error message when you can't find a user
-- Add filters
+You can log in into your Anilist account and move entries from one tier to another. If you are logged in, you account will be updated.
+Visit the [Anilist forum thread](https://anilist.co/forum/thread/63809).
 
 ## Contribute
 Feel free to improve the app and send a pull request!
