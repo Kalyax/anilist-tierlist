@@ -10,8 +10,9 @@ export const useUserStore = defineStore("user", () => {
 
     const tiersStructure = new Array<Tier>;
     const structureEntries = fStructureEntries;
+    const structuredEntries = new Array<Array<Entry>>;
 
     const hiddenFormats = new Array<MediaFormat>;
 
-    return {anilistUser, animeList, mangaList, tiersStructure, structureEntries, hiddenFormats}
+    return {anilistUser, animeList, mangaList, tiersStructure, structureEntries, hiddenFormats, structuredEntries}
 })

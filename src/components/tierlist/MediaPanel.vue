@@ -1,5 +1,5 @@
 <template>
-    <div class="relative rounded-2xl m-1" draggable="true">
+    <div class="relative rounded-2xl m-1">
         <div class="rounded-md absolute inset-0 z-10
           bg-slate-700/20 bg-clip-padding backdrop-filter backdrop-blur backdrop-saturate-100 
             backdrop-contrast-100 gradientSettings

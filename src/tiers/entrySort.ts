@@ -36,6 +36,8 @@ export const toEntryList = (lists: Array<List>): Array<Entry> => {
 100 points: valgul
 5 star: readz
 3 star: ?*/
+
+//Takes a list of entries and structures them into tiers according to the given tier structure
 export const structureEntries = (entryList: Array<Entry>, tiersStructure: Array<Tier>, hiddenFormats: Array<MediaFormat>): Array<Array<Entry>> => {
     let structuredEntries: Array<Array<Entry>> = tiersStructure.map(x => []);
 

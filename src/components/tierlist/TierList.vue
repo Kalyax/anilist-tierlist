@@ -7,12 +7,14 @@
             <div class="border-t-transparent border-solid animate-spin rounded-full border-zinc-700 border-4 h-32 w-32"></div>
         </div>
 
-        <SingleTier v-else v-for="(tier, index) in structuredEntries" :tier="tier" :index="index"/>
+        <SingleTier v-else v-for="(tier, index) in userStore.structuredEntries" :tier="tier" :index="index" 
+                @updateView="() => updateView(stateStore.mediaTypeState)" 
+        />
     </section>
 </template>
 
 <script setup lang="ts">
-import { ref, watch }    from 'vue';
+import { watch }         from 'vue';
 import { useUserStore }  from '@/stores/userStore';
 import { MediaType }     from '@/types';
 import SingleTier        from './../tierlist/SingleTier.vue';
@@ -22,13 +24,12 @@ const userStore  = useUserStore()
 const stateStore = useStateStore();
 
 //detects when the state mediaTypeState changes to update view
-watch(() => stateStore.mediaTypeState, (newVal, oldVal) => { updateView(newVal) })
+watch(() => stateStore.mediaTypeState, (newVal, _) => { updateView(newVal) })
 
 //updating the content of the tierlist
-const structuredEntries = ref()
 function updateView(mediaType: MediaType){
     const entryList = mediaType == MediaType.ANIME ? userStore.animeList : userStore.mangaList
-    structuredEntries.value = userStore.structureEntries(entryList, userStore.tiersStructure, userStore.hiddenFormats)
+    userStore.structuredEntries = userStore.structureEntries(entryList, userStore.tiersStructure, userStore.hiddenFormats)
     stateStore.viewFetchState = 2
 }
 

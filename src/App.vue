@@ -45,7 +45,22 @@ onMounted(async () => {
     if(access_token.length > 1){
         viewerStore.token = access_token[1]?.split("&")[0]?.split("=")[1];
         const response = await anilistAuth(viewerQuery, viewerStore.token, {})
-        viewerStore.viewer = response.data.Viewer;
+        if(response.data == null){
+            msgError.value = "Could not log in. Token may be invalid or expired. Please try again.";
+            showError.value = true;
+            setTimeout(function (){
+                showError.value = false;
+            }, 50000);
+        }
+        else{
+            viewerStore.viewer = response.data.Viewer;
+
+            msgError.value = "You are now logged in. DO NOT share your tierlist URL with access token in it!";
+            showError.value = true;
+            setTimeout(function (){
+                showError.value = false;
+            }, 10000);
+        }
     }
 })
 

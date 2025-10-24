@@ -43,7 +43,7 @@
                 </svg>
             </button>
 
-            <!--<div v-if="viewerStore.token === '' || viewerStore.viewer == undefined">
+            <div v-if="viewerStore.token === '' || viewerStore.viewer == undefined">
                 <a href="https://anilist.co/api/v2/oauth/authorize?client_id=5767&response_type=token" 
                 class="border-solid border border-zinc-700 rounded-xl px-3 p-1.5 bg-radial from-zinc-800 hover:from-40% to-zinc-900 duration-100">
                     Log in
@@ -53,7 +53,7 @@
                 <a class="justify-center md:justify-start mb-3 md:mb-0 flex items-center space-x-3">
                     <img :src="viewerStore.viewer.avatar?.medium" width="32" height="32" class="rounded-full">
                 </a>
-            </div>-->
+            </div>
         </div>
     </div>
 </template>
