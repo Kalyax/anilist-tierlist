@@ -17,8 +17,17 @@
             <p class="text-xl">What's new?</p>
             <ul class="list-disc list-inside">
                 <li>New style!</li>
+                <li>You can now close pop-ups by clicking outside of them</li>
                 <li>You can now drag entries from one tier to another (changes its score to the <br/>lower bound of the tier)</li>
                 <li>You can now log in with your Anilist account and scores are automatically <br/>updated when entries are moved on the tierlist</li>
+            </ul>
+            <br/>
+
+            <p class="text-xl">Coming soon...</p>
+            <ul class="list-disc list-inside">
+                <li>Phone support</li>
+                <li>A way to edit entries' score more precisely than dragging them from one <br/> tier to another</li>
+                
             </ul>
             <br/>
 
