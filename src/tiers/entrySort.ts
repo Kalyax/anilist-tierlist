@@ -33,7 +33,7 @@ export const toEntryList = (lists: Array<List>): Array<Entry> => {
 /*test usernames
 10 points decimal: Kalyax
 10 points: ?
-100 points: valgul
+100 points: valgul / Rinko for custom tiers
 5 star: readz
 3 star: ?*/
 

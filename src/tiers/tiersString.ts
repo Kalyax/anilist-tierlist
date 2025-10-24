@@ -19,9 +19,9 @@ export const stringToTiers = (tiersString: string) => {
         let tier = {
             name: tiersArray.shift(),
             color: "bg-" + tiersArray.shift() + "-400",
-            from: tiersArray.shift() as unknown as number,
-            to: tiersArray.shift() as unknown as number
-        } as unknown as Tier;
+            from: Number(tiersArray.shift()),
+            to: Number(tiersArray.shift())
+        } as Tier;
     
         tiersStructure.push(tier);
         i += 4;
