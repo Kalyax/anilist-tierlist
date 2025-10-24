@@ -1,5 +1,5 @@
 <template>
-    <div @click="closeSettingsClickOutside($event)" id="testf" class="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black/50 z-50">
+    <div @click="closeSettingsClickOutside($event)" id="bg-fade-settings" class="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black/50 z-50">
         <div class="min-w-fit min-h-0 w-fit max-h-screen rounded-2xl px-10 py-8 border-solid border-zinc-800 border 
         bg-zinc-700/20 bg-clip-padding backdrop-filter backdrop-blur backdrop-saturate-100 
         backdrop-contrast-100 gradientSettings">
@@ -150,6 +150,7 @@ const getLink = (el: string) => {
 
     const url = new URL(window.location.href);
     const searchParams = url.searchParams;
+    url.hash = "";
 
     searchParams.set('id', <string><unknown>userStore.anilistUser.id)
     if(el == "link_w") searchParams.set('tiers', encodeURI(tiersToString(userStore.tiersStructure)))
@@ -169,7 +170,7 @@ function copyLink(el: string) {
 } 
 
 function closeSettingsClickOutside(e: any){
-    if(e.target == document.getElementById('testf')){
+    if(e.target == document.getElementById('bg-fade-settings')){
         stateStore.settingsState = true
     }
 }

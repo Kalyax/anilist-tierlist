@@ -8,7 +8,7 @@
         </div>
 
         <SingleTier v-else v-for="(tier, index) in userStore.structuredEntries" :tier="tier" :index="index" 
-                @updateView="() => updateView(stateStore.mediaTypeState)" 
+                @updateView="(id: number, score: number) => {updateView(stateStore.mediaTypeState); updateAnilistScores(id, score)}" 
         />
     </section>
 </template>
@@ -19,9 +19,13 @@ import { useUserStore }  from '@/stores/userStore';
 import { MediaType }     from '@/types';
 import SingleTier        from './../tierlist/SingleTier.vue';
 import { useStateStore } from '@/stores/stateStore';
+import { anilistAuth } from '@/graphql/anilist';
+import { changeScoreQuery } from '@/graphql/queries';
+import { useViewerStore } from '@/stores/viewerStore';
 
 const userStore  = useUserStore()
 const stateStore = useStateStore();
+const viewerStore = useViewerStore();
 
 //detects when the state mediaTypeState changes to update view
 watch(() => stateStore.mediaTypeState, (newVal, _) => { updateView(newVal) })
@@ -31,6 +35,21 @@ function updateView(mediaType: MediaType){
     const entryList = mediaType == MediaType.ANIME ? userStore.animeList : userStore.mangaList
     userStore.structuredEntries = userStore.structureEntries(entryList, userStore.tiersStructure, userStore.hiddenFormats)
     stateStore.viewFetchState = 2
+}
+
+function updateAnilistScores(id: number, score: number){
+    console.log(id)
+    if(viewerStore.token === '' || viewerStore.viewer == undefined){}
+    else if(viewerStore.viewer != undefined && viewerStore.viewer.id !== userStore.anilistUser.id){}
+    else{
+        anilistAuth(changeScoreQuery, viewerStore.token, {
+            id: id,
+            score: score
+        }).then((response) => {
+        }).catch((error) => {
+            console.error("Error updating score for id ", id, ": ", error)
+        })
+    }
 }
 
 //Watches for id update

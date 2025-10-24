@@ -28,12 +28,13 @@
         
 
         <div class="flex items-center">  
-            <a target="_blank" class="group md:hover:bg-zinc-800 rounded-full p-2 mr-2 transition-all relative" href="https://github.com/Kalyax/anilist-tierlist">
-                <img class="mx-auto md:mx-0 group-hover:animate-pulse" src="/img/github-mark-white.svg" alt="Github" width="20">
-                <span class="opacity-0 group-hover:opacity-100 transition-all absolute right-12 top-1 bg-black/20 px-2 py-1 rounded-md animate-none whitespace-nowrap">
-                    Leave a star!
-                </span>
-            </a>
+            <button 
+                class="bg-radial from-zinc-800 hover:from-zinc-600 to-zinc-900 from-5% rounded-xl transition-colors border-solid border-zinc-700 border duration-300 font-bold mr-3 px-2 py-1" 
+                @click="stateStore.infoState = false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-6 h-6" viewBox="0 0 16 16">
+                  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                </svg>
+            </button>
             <button 
                 class="bg-radial from-zinc-800 hover:from-zinc-600 to-zinc-900 from-5% rounded-xl transition-colors border-solid border-zinc-700 border duration-300 font-bold mr-3 px-2 py-1" 
                 @click="stateStore.settingsState = false">

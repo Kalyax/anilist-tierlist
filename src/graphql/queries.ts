@@ -126,12 +126,21 @@ const viewerQuery =
 `#graphql
 {
   Viewer {
+    id
     name
     avatar{
       medium
     }
   }
 }
-`
+`;
 
-export { userQuery, userIdQuery, viewerQuery }
+const changeScoreQuery = `#graphql
+mutation ChangeScoreQuery($score: Float, $id: Int) {
+  SaveMediaListEntry(score: $score, mediaId: $id){
+    id
+  }
+}
+`;
+
+export { userQuery, userIdQuery, viewerQuery, changeScoreQuery }

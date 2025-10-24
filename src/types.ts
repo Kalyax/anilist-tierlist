@@ -15,6 +15,7 @@ export interface AnilistUser {
 }
 
 export interface ViewerUser {
+    id: number,
     name: string,
     avatar: {
         medium: string

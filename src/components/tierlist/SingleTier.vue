@@ -4,7 +4,7 @@
                   try {
                     const data = JSON.parse(e.dataTransfer?.getData('text/plain') || '{}')
                     userStore.structuredEntries[data.fromIndex][data.indexInTier].score = userStore.tiersStructure[index].from as number;
-                    $emit('updateView');
+                    $emit('updateView', userStore.structuredEntries[data.fromIndex][data.indexInTier].media.id, userStore.tiersStructure[index].from);
                   } catch (err) { /* ignore invalid payload */ }
                 }">
 

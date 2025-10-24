@@ -2,6 +2,7 @@
     <SearchBar @fetchUser="(username: string) => fetchUser(username)" />
     <TierList class="mx-10" />
     <SettingsPopup :class="{'opacity-0 pointer-events-none': stateStore.settingsState}" class="transition-all" />
+    <InfoPopup :class="{'opacity-0 pointer-events-none': stateStore.infoState}" class="transition-all" />
     <ErrorPopup :msg="msgError" :class="{'opacity-0': !showError, 'opacity-100': showError}"/>
 </template>
 
@@ -12,6 +13,7 @@ import TierList      from './components/tierlist/TierList.vue';
 import SearchBar     from './components/SearchBar.vue';
 import SettingsPopup from './components/SettingsPopup.vue';
 import ErrorPopup    from './components/ErrorPopup.vue';
+import InfoPopup     from './components/InfoPopup.vue';
 
 import { useUserStore }                      from './stores/userStore';
 import { useStateStore }                     from './stores/stateStore';
@@ -55,7 +57,7 @@ onMounted(async () => {
         else{
             viewerStore.viewer = response.data.Viewer;
 
-            msgError.value = "You are now logged in. DO NOT share your tierlist URL with access token in it!";
+            msgError.value = "You are now logged in. DO NOT share your tierlist URL with your access token in it! Use the share buttons in the settings instead.";
             showError.value = true;
             setTimeout(function (){
                 showError.value = false;
